@@ -7,7 +7,7 @@
 int main(int argc, char **argv)
 {
     arma::vec poisson_solver (arma::vec a, arma::vec b, arma::vec c, 
-                              arma::vec v, int n);
+                              arma::vec v, unsigned int n);
     double u_exact (double x);
 
     arma::vec n_vec(3); 
@@ -32,12 +32,14 @@ int main(int argc, char **argv)
         if (n == 100) {
             arma::vec x = arma::linspace<arma::vec> (0, 1, n+2);
             arma::vec u(n);
-            for (int k = 1; k < n-1; k++) {
+            for (int k = 1; k < n; k++) {
                 u[k] = u_exact(x[k]);
 
                 double re = std::fabs((v[k-1] - u[k]) / u[k]);
 
-                std::cout << "re = " << re << std::endl;
+                std::cout << "u(" << x[k] << ") = " << u[k] <<
+                    ", v[" << k-1 << "] = " << v[k-1] <<
+                    ", re = " << re << std::endl;
             }
         }
     }
@@ -47,19 +49,19 @@ int main(int argc, char **argv)
 
 
 arma::vec poisson_solver(arma::vec a, arma::vec b, arma::vec c, 
-                         arma::vec v, int n)
+                         arma::vec v, unsigned int n)
 {
     double f (double x);
 
-    double h = 1.0 /((double) n + 1);
-    
-    arma::vec x = arma::linspace<arma::vec>(h, 1.0 - h, n);
+    arma::vec x = arma::linspace<arma::vec>(0, 1.0, n+2);
     arma::vec fh_vec(n);
-    
+
+    double h = x[1] - x[0];
+
     //Forward subst
     for (int i = 1; i < n; i++) {
         b[i] = b[i] - (a[i-1] * c[i-1]) / b[i-1];
-        fh_vec[i] = (f(x[i]) * h * h) - (a[i-1] * fh_vec[i-1]) / b[i-1];
+        fh_vec[i] = (f(x[i+1]) * h * h) - (a[i-1] * fh_vec[i-1]) / b[i-1];
     }
 
     //Backward subst
