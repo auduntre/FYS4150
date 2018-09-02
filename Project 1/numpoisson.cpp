@@ -11,21 +11,11 @@ int main(int argc, char **argv)
     double u_exact (double x);
 
     arma::vec n_vec(3); 
-    n_vec << 10 << 100 << 1000;
-
-
-    std::string vfile = "v_";
-    std::string ufile = "u_";
-    std::string refile = "re_";
-    std::string ext = ".txt";
-    std::string tmp;
-
-    std::string strarr[3] = {vfile, ufile, refile}; 
+    n_vec << 10 << 100 << 1000 << 10000000;
     int n;
- 
+
     for (int i = 0; i < n_vec.n_elem; i++) {
         n = n_vec[i];
-        tmp = std::to_string(n);
 
         arma::vec a(n);
         arma::vec b(n);
@@ -47,14 +37,11 @@ int main(int argc, char **argv)
             re[j] = std::fabs((v[j] - u[j]) / u[j]);
         }
 
-        for (std::string str: strarr) {
-            str.append(tmp);
-            str.append(ext);
+        if (n == 100) {
+            for (int k = 0; k < n; k++) {
+                std::cout << "re = " << re[k] << std::endl;
+            }
         }
-
-        v.save(vfile, arma::raw_ascii);
-        u.save(ufile, arma::raw_ascii);
-        re.save(refile, arma::raw_ascii); 
     }
 
     return 0;
@@ -69,12 +56,13 @@ arma::vec poisson_solver(arma::vec a, arma::vec b, arma::vec c,
     arma::vec x = arma::linspace<arma::vec>(0, 1.0, n+2);
     arma::vec fh_vec(n);
 
-    double h = x[1] - x[0];
+    double h = (x[1] - x[0]);
+    double hh = h * h;
 
     //Forward subst
     for (int i = 1; i < n; i++) {
         b[i] = b[i] - (a[i-1] * c[i-1]) / b[i-1];
-        fh_vec[i] = (f(x[i+1]) * h * h) - (a[i-1] * fh_vec[i-1]) / b[i-1];
+        fh_vec[i] = (f(x[i+1]) * hh) - (a[i-1] * fh_vec[i-1]) / b[i-1];
     }
 
     //Backward subst
