@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <armadillo>
-
+#include <string>
 
 int main(int argc, char **argv)
 {
@@ -13,10 +13,19 @@ int main(int argc, char **argv)
     arma::vec n_vec(3); 
     n_vec << 10 << 100 << 1000;
 
-    double n;
-    
+
+    std::string vfile = "v_";
+    std::string ufile = "u_";
+    std::string refile = "re_";
+    std::string ext = ".txt";
+    std::string tmp;
+
+    std::string strarr[3] = {vfile, ufile, refile}; 
+    int n;
+ 
     for (int i = 0; i < n_vec.n_elem; i++) {
         n = n_vec[i];
+        tmp = std::to_string(n);
 
         arma::vec a(n);
         arma::vec b(n);
@@ -28,20 +37,24 @@ int main(int argc, char **argv)
         c.fill(-1.0);
 
         v = poisson_solver(a, b, c, v, n);
-        
-        if (n == 100) {
-            arma::vec x = arma::linspace<arma::vec> (0, 1, n+2);
-            arma::vec u(n);
-            for (int k = 1; k < n; k++) {
-                u[k] = u_exact(x[k]);
 
-                double re = std::fabs((v[k-1] - u[k]) / u[k]);
+        arma::vec x = arma::linspace<arma::vec> (0.0, 1.0, n+2);
+        arma::vec u(n);
+        arma::vec re(n);
 
-                std::cout << "u(" << x[k] << ") = " << u[k] <<
-                    ", v[" << k-1 << "] = " << v[k-1] <<
-                    ", re = " << re << std::endl;
-            }
+        for (int j = 0; j < n; j++) {
+            u[j] = u_exact(x[j+1]);
+            re[j] = std::fabs((v[j] - u[j]) / u[j]);
         }
+
+        for (std::string str: strarr) {
+            str.append(tmp);
+            str.append(ext);
+        }
+
+        v.save(vfile, arma::raw_ascii);
+        u.save(ufile, arma::raw_ascii);
+        re.save(refile, arma::raw_ascii); 
     }
 
     return 0;
