@@ -16,6 +16,8 @@ int main(int argc, char **argv)
     arma::vec n_vec;
     n_vec << 10 << 100 << 1000 << 1000000 << 10000000;
     
+    arma::vec re_max(n_vec.n_elem);
+
     std::string ext = ".txt";
     std::string nstr;
     std::string ustr;
@@ -51,12 +53,13 @@ int main(int argc, char **argv)
             f_vec[j] = f(x[j+1]) * hh; 
         }
 
-        //v = solver(f_vec, a, b, c, n);
-        v = poisson_solver(f_vec, n);
+        v = solver(f_vec, a, b, c, n);
+        //v = poisson_solver(f_vec, n);
 
         for (int j = 0; j < n; j++) {
-            re[j] = (u[j] - v[j]) / u[j];
+            re[j] = std::fabs((u[j] - v[j]) / u[j]);
         }
+        re_max[i] = re.max();
 
         nstr = std::to_string(n) + ext;
         ustr = "u" + nstr;
