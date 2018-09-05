@@ -15,10 +15,16 @@ int main(int argc, char **argv)
 
     arma::vec n_vec(3);
     n_vec << 10 << 100 << 1000;
+    
+    double hh;
+    double h;
     int n;
+
 
     for (int i = 0; i < n_vec.n_elem; i++) {
         n = n_vec[i];
+        h = 1. / ((double) n + 1);
+        hh = h * h;
 
         arma::vec x = arma::linspace<arma::vec> (0.0, 1.0, n+2);
         
@@ -37,34 +43,20 @@ int main(int argc, char **argv)
 
         for (int j = 0; j < n; j++) {
             u[j] = u_exact(x[j+1]);
-            f_vec[j] = f(x[j+1]); 
+            f_vec[j] = f(x[j+1]) * hh; 
         }
 
-        v = solver(f_vec, a, b, c, n);
+        //v = solver(f_vec, a, b, c, n);
+        v = poisson_solver(f_vec, n);
 
-        double v_;
-        double u_;
         for (int j = 0; j < n; j++) {
-            u_ = u[j];
-            v_ = v[j];
             re[j] = (u[j] - v[j]) / u[j];
         }
 
-        
-        if (n == 10) {
-            std::cout.precision(17);
-            for (int k = 0; k < n; k++) {
-                std::cout << "re = " << re[k] <<
-                          ", u[" << k << "] = " << u[k] <<
-                          ", v[" << k << "] = " << v[k] <<
-                          std::endl;
-            }
-            std::cout << "DONE" << std::endl;
-        }
+        std::cout << re[0] << std::endl;
     }
     return 0;
 }
-
 
 
 arma::vec solver(arma::vec f_vec, arma::vec a, arma::vec b,
@@ -72,14 +64,10 @@ arma::vec solver(arma::vec f_vec, arma::vec a, arma::vec b,
 {
     arma::vec v(n);
 
-    double h = 1.0 / ((double) n + 1.0);
-    double hh = h * h;
-
     //Forward subst
-    f_vec[0] = f_vec[0] * hh;
     for (int i = 1; i < n; i++) {
         b[i] = b[i] - (a[i-1] * c[i-1]) / b[i-1];
-        f_vec[i] = (f_vec[i] * hh) - (a[i-1] * f_vec[i-1]) / b[i-1];
+        f_vec[i] = f_vec[i] - (a[i-1] * f_vec[i-1]) / b[i-1];
     }
 
     //Backward subst
@@ -91,21 +79,22 @@ arma::vec solver(arma::vec f_vec, arma::vec a, arma::vec b,
     return v;
 }
 
+
 arma::vec poisson_solver(arma::vec f_vec, unsigned int n)
 {
     arma::vec v(n);
+    arma::vec b(n);
 
-    double h = 1.0 / ((double) n + 1.0);
-    double hh = h * h;
-    double k = (2. / 3.);
-
-    v[n-1] = k * (hh * (f_vec[n-1] - f_vec[n-2]));
-
-    for (int i = n-2; i > 0; i++) {
-        v[i] = k * (hh * (f_vec[i] - f_vec[i-1]) + v[i+1]);
+    b[0] = 2.0; 
+    for (int i = 1; i < n; i++) {
+        b[i] = 2.0 - 1 / b[i-1];
+        f_vec[i] = f_vec[i] + (f_vec[i-1] / b[i-1]);
     }
 
-    v[0] = 0.5 * (v[1] + hh * f_vec[0]);
+    v[n-1] = f_vec[n-1] / b[n-1]; 
+    for (int i = n-2; i >= 0; i--) {
+        v[i] = (f_vec[i] + v[i+1]) / b[i];
+    }
     
     return v;
 }
