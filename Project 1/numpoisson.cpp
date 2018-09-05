@@ -13,15 +13,20 @@ int main(int argc, char **argv)
     double u_exact (double x);
     double f (double x); 
 
-    arma::vec n_vec(3);
-    n_vec << 10 << 100 << 1000;
+    arma::vec n_vec;
+    n_vec << 10 << 100 << 1000 << 1000000 << 10000000;
     
+    std::string ext = ".txt";
+    std::string nstr;
+    std::string ustr;
+    std::string vstr;
+
     double hh;
     double h;
     int n;
 
+    for (int i = 0; i < n_vec.n_elem - 2; i++) {
 
-    for (int i = 0; i < n_vec.n_elem; i++) {
         n = n_vec[i];
         h = 1. / ((double) n + 1);
         hh = h * h;
@@ -53,8 +58,14 @@ int main(int argc, char **argv)
             re[j] = (u[j] - v[j]) / u[j];
         }
 
-        std::cout << re[0] << std::endl;
+        nstr = std::to_string(n) + ext;
+        ustr = "u" + nstr;
+        vstr = "v" + nstr;
+
+        u.save(ustr, arma::raw_ascii);
+        v.save(vstr, arma::raw_ascii);
     }
+
     return 0;
 }
 
