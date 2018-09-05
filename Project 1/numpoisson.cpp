@@ -7,8 +7,9 @@
 
 int main(int argc, char **argv)
 {
-    arma::vec poisson_solver (arma::vec f_vec, arma::vec a, arma::vec b,
-                              arma::vec c, unsigned int n);
+    arma::vec poisson_solver (arma::vec f_vec, unsigned int n);
+    arma::vec solver (arma::vec f_vec, arma::vec a, arma::vec b,
+                      arma::vec c, unsigned int n);
     double u_exact (double x);
     double f (double x); 
 
@@ -39,13 +40,19 @@ int main(int argc, char **argv)
             f_vec[j] = f(x[j+1]); 
         }
 
-        v = poisson_solver(f_vec, a, b, c, n);
+        v = solver(f_vec, a, b, c, n);
 
+        double v_;
+        double u_;
         for (int j = 0; j < n; j++) {
-            re[j] = std::fabs((v[j] - u[j]) / u[j]);
+            u_ = u[j];
+            v_ = v[j];
+            re[j] = (u[j] - v[j]) / u[j];
         }
 
-        if (n == 100) {
+        
+        if (n == 10) {
+            std::cout.precision(17);
             for (int k = 0; k < n; k++) {
                 std::cout << "re = " << re[k] <<
                           ", u[" << k << "] = " << u[k] <<
@@ -60,13 +67,12 @@ int main(int argc, char **argv)
 
 
 
-arma::vec poisson_solver(arma::vec f_vec, arma::vec a, arma::vec b,
-                         arma::vec c, unsigned int n)
+arma::vec solver(arma::vec f_vec, arma::vec a, arma::vec b,
+                 arma::vec c, unsigned int n)
 {
-    arma::vec x = arma::linspace<arma::vec>(0, 1.0, n+2);
     arma::vec v(n);
 
-    double h = 1.0 / ((double) n + 1.0); // or (x[1] - x[0]);
+    double h = 1.0 / ((double) n + 1.0);
     double hh = h * h;
 
     //Forward subst
@@ -82,6 +88,25 @@ arma::vec poisson_solver(arma::vec f_vec, arma::vec a, arma::vec b,
         v[i] = (f_vec[i] - c[i] * v[i+1]) / b[i];
     }
 
+    return v;
+}
+
+arma::vec poisson_solver(arma::vec f_vec, unsigned int n)
+{
+    arma::vec v(n);
+
+    double h = 1.0 / ((double) n + 1.0);
+    double hh = h * h;
+    double k = (2. / 3.);
+
+    v[n-1] = k * (hh * (f_vec[n-1] - f_vec[n-2]));
+
+    for (int i = n-2; i > 0; i++) {
+        v[i] = k * (hh * (f_vec[i] - f_vec[i-1]) + v[i+1]);
+    }
+
+    v[0] = 0.5 * (v[1] + hh * f_vec[0]);
+    
     return v;
 }
 
