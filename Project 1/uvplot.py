@@ -7,8 +7,8 @@ def uv_plot():
     ns = [10, 100, 1000]
 
     for n in ns:
-        u = np.loadtxt("u" + str(n) + ".txt")
-        v = np.loadtxt("v" + str(n) + ".txt")
+        u = np.loadtxt("results/u" + str(n) + ".txt")
+        v = np.loadtxt("results/v" + str(n) + ".txt")
 
         x = np.linspace(0, 1, n+2)
 
@@ -20,7 +20,7 @@ def uv_plot():
 def re_table():
     ns = [10 ** i for i in range(1, 8)]
     hs = [1.0 / (n + 1) for n in ns]
-    res = np.loadtxt("re_max.txt")
+    res = np.loadtxt("results/re_max.txt")
 
     print("{:9}  |  {:14}".format("N:", "Re_max:"))
     print("-----------|----------------")

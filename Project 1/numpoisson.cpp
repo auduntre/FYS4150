@@ -64,14 +64,14 @@ int main(int argc, char **argv)
         re_max[i] = relative_max_error(u, v);
 
         nstr = std::to_string(n) + ".txt";
-        ustr = "u" + nstr;
-        vstr = "v" + nstr;
+        ustr = "results/u" + nstr;
+        vstr = "results/v" + nstr;
 
         u.save(ustr, arma::raw_ascii);
         v.save(vstr, arma::raw_ascii);
     }
 
-    method_compare.open("method_compare.txt");
+    method_compare.open("results/method_compare.txt");
     
     for (int i = n_vec.n_elem - k; i < n_vec.n_elem; i++) {
         method_compare << "------------------------------" << std::endl;
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     method_compare.close();
 
     re_max = arma::log10(re_max);
-    re_max.save("re_max.txt", arma::raw_ascii);
+    re_max.save("results/re_max.txt", arma::raw_ascii);
 
     return 0;
 }
