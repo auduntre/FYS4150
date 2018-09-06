@@ -15,19 +15,21 @@ def uv_plot():
         # TODO: add legends!
         plt.plot(x[1:-1], u)
         plt.plot(x[1:-1], v, 'r--')
-        plt.show()
+        plt.savefig("results/uvplot" + str(n) + ".png")
+
 
 def re_table():
     ns = [10 ** i for i in range(1, 8)]
     hs = [1.0 / (n + 1) for n in ns]
     res = np.loadtxt("results/re_max.txt")
 
-    print("{:9}  |  {:14}".format("N:", "Re_max:"))
-    print("-----------|----------------")
+    with open("results/re_table.txt", "w") as re_table:
+        re_table.write("{:9}  |  {:14}\n".format("N:", "Re_max:"))
+        re_table.write("-----------|----------------\n")
 
-    row_form = "{:>9}  |  {:>14}"
-    for n, re in zip(ns, res):
-        print(row_form.format(n, re))
+        row_form = "{:>9}  |  {:>14}\n"
+        for n, re in zip(ns, res):
+            re_table.write(row_form.format(n, re))
 
 
 if __name__ == "__main__":

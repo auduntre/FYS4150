@@ -1,20 +1,20 @@
 ------------------------------
 N = 10000
-General solver = 0.002218 seconds.
-Poisson solver = 0.001611 seconds.
-Time of poisson solver / Time of general solver = 0.72633
+General solver = 0.000751 seconds.
+Poisson solver = 0.000383 seconds.
+Time of poisson solver / Time of general solver = 0.509987
 ------------------------------
 N = 100000
-General solver = 0.007947 seconds.
-Poisson solver = 0.004273 seconds.
-Time of poisson solver / Time of general solver = 0.537687
+General solver = 0.007899 seconds.
+Poisson solver = 0.004042 seconds.
+Time of poisson solver / Time of general solver = 0.51171
 ------------------------------
 N = 1000000
-General solver = 0.075863 seconds.
-Poisson solver = 0.041118 seconds.
-Time of poisson solver / Time of general solver = 0.542003
+General solver = 0.078584 seconds.
+Poisson solver = 0.040605 seconds.
+Time of poisson solver / Time of general solver = 0.516708
 ------------------------------
 N = 10000000
-General solver = 0.826481 seconds.
-Poisson solver = 0.503157 seconds.
-Time of poisson solver / Time of general solver = 0.608794
+General solver = 1.81223 seconds.
+Poisson solver = 0.513647 seconds.
+Time of poisson solver / Time of general solver = 0.283434

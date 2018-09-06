@@ -121,6 +121,8 @@ int main(int argc, char **argv)
     re_max = arma::log10(re_max);
     re_max.save("results/re_max.txt", arma::raw_ascii);
 
+
+
     return 0;
 }
 
