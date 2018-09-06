@@ -1,0 +1,9 @@
+N = 1000
+General solver = 0 seconds.
+Poisson solver = 0 seconds.
+N = 1000000
+General solver = 0 seconds.
+Poisson solver = 64 seconds.
+N = 10000000
+General solver = 1 seconds.
+Poisson solver = 810 seconds.
