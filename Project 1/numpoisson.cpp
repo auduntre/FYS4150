@@ -13,8 +13,8 @@ int main(int argc, char **argv)
     arma::vec u_exact (arma::vec x);
     arma::vec set_and_fill (unsigned int n, double filler);
     arma::vec poisson_solver (arma::vec f_vec, unsigned int n);
-    arma::vec solver (arma::vec f_vec, arma::vec a, arma::vec b,
-                      arma::vec c, unsigned int n);
+    arma::vec tridiag_solver (arma::vec f_vec, arma::vec a, arma::vec b,
+                              arma::vec c, unsigned int n);
 
     arma::vec n_vec; 
     n_vec << 10 << 100 << 1000 << 10000 << 100000 << 
@@ -58,11 +58,13 @@ int main(int argc, char **argv)
         x = arma::linspace<arma::vec>(h, 1.0 - h, n);
         u = u_exact(x);
         f_vec = hh * f(x);
-        v = solver(f_vec, a, b, c, n);
+        
+        v = tridiag_solver(f_vec, a, b, c, n);
 
         // Saving re_max for later analysis
         re_max[i] = relative_max_error(u, v);
 
+        // Filenames for saved vectors
         nstr = std::to_string(n) + ".txt";
         ustr = "results/u" + nstr;
         vstr = "results/v" + nstr;
@@ -90,24 +92,26 @@ int main(int argc, char **argv)
         
         method_compare << "N = " << n << std::endl;
 
+        // Timing the general tridiagonal solver
         start = clock();
-        v = solver(f_vec, a, b, c, n);
+        v = tridiag_solver(f_vec, a, b, c, n);
         end = clock();
-
-        re_max[i] = relative_max_error(u, v);
-
         general_time = (double) (end - start) / CLOCKS_PER_SEC;
+
         method_compare << "General solver = " << general_time <<
                           " seconds." << std::endl;
 
+        re_max[i] = relative_max_error(u, v);
+        
         // Reset v to make sure performance not impacted
         v.set_size(n);
-        
+       
+        // Timing the poisson special solver 
         start = clock();
         v = poisson_solver(f_vec, n);
         end = clock();
-
         poisson_time = (double) (end - start) / CLOCKS_PER_SEC;
+
         method_compare << "Poisson solver = " << poisson_time <<
                           " seconds." << std::endl;
 
@@ -125,8 +129,8 @@ int main(int argc, char **argv)
 }
 
 
-arma::vec solver(arma::vec f_vec, arma::vec a, arma::vec b,
-                 arma::vec c, unsigned int n)
+arma::vec tridiag_solver(arma::vec f_vec, arma::vec a, arma::vec b,
+                         arma::vec c, unsigned int n)
 {
     arma::vec v(n);
 

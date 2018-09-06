@@ -16,6 +16,7 @@ def uv_plot():
         plt.plot(x[1:-1], u)
         plt.plot(x[1:-1], v, 'r--')
         plt.savefig("results/uvplot" + str(n) + ".png")
+        plt.figure()
 
 
 def re_table():
