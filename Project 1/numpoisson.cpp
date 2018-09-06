@@ -12,12 +12,15 @@ int main(int argc, char **argv)
     arma::vec poisson_solver (arma::vec f_vec, unsigned int n);
     arma::vec solver (arma::vec f_vec, arma::vec a, arma::vec b,
                       arma::vec c, unsigned int n);
-    double u_exact (double x);
-    double f (double x); 
+    arma::vec u_exact (arma::vec x);
+    arma::vec f (arma::vec x); 
+    double relative_max_error (arma::vec u, arma::vec v);
 
     arma::vec n_vec; 
+    n_vec << 10 << 100 << 1000 << 10000 << 100000 << 
+             1000000 << 10000000;
+    
     arma::vec re_max(n_vec.n_elem);
-    arma::vec re;
     arma::vec f_vec;
     arma::vec v;
     arma::vec u;
@@ -36,40 +39,29 @@ int main(int argc, char **argv)
     clock_t start;
     clock_t end;
     
-    double method_time;
+    double general_time;
+    double poisson_time;
     double hh;
     double h;
     int n;
+    int k = 4;
     
-    n_vec << 10 << 100 << 1000 << 1000000 << 10000000;
-    
-    for (int i = 0; i < n_vec.n_elem - 2; i++) {
+    for (int i = 0; i < n_vec.n_elem - k; i++) {
         n = n_vec[i];
         h = 1. / ((double) n + 1);
         hh = h * h;
-
-        x = arma::linspace<arma::vec>(0.0, 1.0, n+2);
         
         a = set_and_fill(n, -1.0);
         b = set_and_fill(n, 2.0);
         c = a;
         
-        f_vec.set_size(n);
-        u.set_size(n);
-        re.set_size(n);
-
-        for (int j = 0; j < n; j++) {
-            u[j] = u_exact(x[j+1]);
-            f_vec[j] = f(x[j+1]) * hh; 
-        }
-
+        x = arma::linspace<arma::vec>(h, 1.0 - h, n);
+        u = u_exact(x);
+        f_vec = hh * f(x);
         v = solver(f_vec, a, b, c, n);
 
         // Saving re_max for later analysis
-        for (int j = 0; j < n; j++) {
-            re[j] = std::fabs((u[j] - v[j]) / u[j]);
-        }
-        re_max[i] = re.max();
+        re_max[i] = relative_max_error(u, v);
 
         nstr = std::to_string(n) + ".txt";
         ustr = "u" + nstr;
@@ -81,47 +73,54 @@ int main(int argc, char **argv)
 
     method_compare.open("method_compare.txt");
     
-    for (int i = n_vec.n_elem - 3; i < n_vec.n_elem; i++) {
-        n = n_vec[i];
-        x = arma::linspace<arma::vec>(0.0, 1.0, n+2);
+    for (int i = n_vec.n_elem - k; i < n_vec.n_elem; i++) {
+        method_compare << "------------------------------" << std::endl;
 
-        v.set_size(n);
-        f_vec.set_size(n);
-        a = set_and_fill(n, -1.0);
-        b = set_and_fill(n, 2.0);
-        c = set_and_fill(n, -1.0);
-        
+        n = n_vec[i];
         h = 1.0 / (n + 1.0);
         hh = h * h;
+        
+        x = arma::linspace<arma::vec>(h, 1.0 - h, n);
+        u = u_exact(x);
+        f_vec = hh * f(x);
 
+        a = set_and_fill(n, -1.0);
+        b = set_and_fill(n, 2.0);
+        c = a;
+        
         method_compare << "N = " << n << std::endl;
-
-        for (int  j = 0; j < n; j++) {
-            f_vec[j] = f(x[j+1]) * hh;
-        }
 
         start = clock();
         v = solver(f_vec, a, b, c, n);
         end = clock();
 
-        method_time = (end - start) / CLOCKS_PER_SEC;
-        method_compare << "General solver = " << method_time <<
+        re_max[i] = relative_max_error(u, v);
+
+        general_time = (double) (end - start) / CLOCKS_PER_SEC;
+        method_compare << "General solver = " << general_time <<
                           " seconds." << std::endl;
 
+        // Reset v to make sure performance not impacted
         v.set_size(n);
         
         start = clock();
         v = poisson_solver(f_vec, n);
         end = clock();
 
-        method_time = 1000 * (end - start) / CLOCKS_PER_SEC;
-        method_compare << "Poisson solver = " << method_time <<
+        poisson_time = (double) (end - start) / CLOCKS_PER_SEC;
+        method_compare << "Poisson solver = " << poisson_time <<
                           " seconds." << std::endl;
-       
-    }
 
-    method_compare.close();
+        method_compare << "Time of poisson solver / " << 
+                          "Time of general solver = " <<
+                          poisson_time / general_time << std::endl;
+    }
     
+    method_compare.close();
+
+    re_max = arma::log10(re_max);
+    re_max.save("re_max.txt", arma::raw_ascii);
+
     return 0;
 }
 
@@ -169,16 +168,23 @@ arma::vec poisson_solver(arma::vec f_vec, unsigned int n)
 }
 
 
-double f(double x)
+arma::vec f(arma::vec x)
 {
-    return 100.0 * std::exp(-10.0 * x);
+    return 100.0 * arma::exp(-10.0 * x);
 
 }
 
 
-double u_exact(double x)
+arma::vec u_exact(arma::vec x)
 {
-    return 1.0 - (1.0 - std::exp(-10.0)) * x - std::exp(-10 * x);
+    return 1.0 - (1.0 - std::exp(-10.0)) * x - arma::exp(-10 * x);
+}
+
+
+double relative_max_error(arma::vec u, arma::vec v) 
+{
+    arma::vec re = arma::abs((u - v) / u);
+    return re.max();
 }
 
 
