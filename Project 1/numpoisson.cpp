@@ -3,7 +3,7 @@
 #include <cmath>
 #include <armadillo>
 #include <string>
-
+#include <time.h>
 
 int main(int argc, char **argv)
 {
@@ -13,40 +13,46 @@ int main(int argc, char **argv)
     double u_exact (double x);
     double f (double x); 
 
-    arma::vec n_vec;
-    n_vec << 10 << 100 << 1000 << 1000000 << 10000000;
-    
+    arma::vec n_vec; 
     arma::vec re_max(n_vec.n_elem);
+    arma::vec re;
+    arma::vec f_vec;
+    arma::vec v;
+    arma::vec u;
+    arma::vec x;
 
-    std::string ext = ".txt";
-    std::string nstr;
-    std::string ustr;
-    std::string vstr;
-
+    arma::vec a;
+    arma::vec b;
+    arma::vec c;
+    
     double hh;
     double h;
     int n;
 
+    std::string nstr;
+    std::string ustr;
+    std::string vstr;
+    
+    n_vec << 10 << 100 << 1000 << 1000000 << 10000000;
     for (int i = 0; i < n_vec.n_elem - 2; i++) {
-
         n = n_vec[i];
         h = 1. / ((double) n + 1);
         hh = h * h;
 
-        arma::vec x = arma::linspace<arma::vec> (0.0, 1.0, n+2);
+        x = arma::linspace<arma::vec>(0.0, 1.0, n+2);
         
-        arma::vec f_vec(n);
-        arma::vec a(n);
-        arma::vec b(n);
-        arma::vec c(n);
+        a.set_size(n);
+        b.set_size(n);
+        c.set_size(n);
         
         a.fill(-1.0);
         b.fill(2.0);
         c.fill(-1.0);
         
-        arma::vec v(n);
-        arma::vec u(n);
-        arma::vec re(n);
+        f_vec.set_size(n);
+        v.set_size(n);
+        u.set_size(n);
+        re.set_size(n);
 
         for (int j = 0; j < n; j++) {
             u[j] = u_exact(x[j+1]);
@@ -56,12 +62,13 @@ int main(int argc, char **argv)
         v = solver(f_vec, a, b, c, n);
         //v = poisson_solver(f_vec, n);
 
+        // Saving re_max for later analysis
         for (int j = 0; j < n; j++) {
             re[j] = std::fabs((u[j] - v[j]) / u[j]);
         }
         re_max[i] = re.max();
 
-        nstr = std::to_string(n) + ext;
+        nstr = std::to_string(n) + ".txt";
         ustr = "u" + nstr;
         vstr = "v" + nstr;
 
@@ -99,12 +106,14 @@ arma::vec poisson_solver(arma::vec f_vec, unsigned int n)
     arma::vec v(n);
     arma::vec b(n);
 
+    //Forward subst
     b[0] = 2.0; 
     for (int i = 1; i < n; i++) {
         b[i] = 2.0 - 1 / b[i-1];
         f_vec[i] = f_vec[i] + (f_vec[i-1] / b[i-1]);
     }
 
+    //Backward subst
     v[n-1] = f_vec[n-1] / b[n-1]; 
     for (int i = n-2; i >= 0; i--) {
         v[i] = (f_vec[i] + v[i+1]) / b[i];
