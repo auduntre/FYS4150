@@ -8,13 +8,13 @@
 
 int main(int argc, char **argv)
 {
+    double relative_max_error (arma::vec u, arma::vec v);
+    arma::vec f (arma::vec x);    
+    arma::vec u_exact (arma::vec x);
     arma::vec set_and_fill (unsigned int n, double filler);
     arma::vec poisson_solver (arma::vec f_vec, unsigned int n);
     arma::vec solver (arma::vec f_vec, arma::vec a, arma::vec b,
                       arma::vec c, unsigned int n);
-    arma::vec u_exact (arma::vec x);
-    arma::vec f (arma::vec x); 
-    double relative_max_error (arma::vec u, arma::vec v);
 
     arma::vec n_vec; 
     n_vec << 10 << 100 << 1000 << 10000 << 100000 << 
@@ -121,8 +121,6 @@ int main(int argc, char **argv)
     re_max = arma::log10(re_max);
     re_max.save("results/re_max.txt", arma::raw_ascii);
 
-
-
     return 0;
 }
 
@@ -173,7 +171,6 @@ arma::vec poisson_solver(arma::vec f_vec, unsigned int n)
 arma::vec f(arma::vec x)
 {
     return 100.0 * arma::exp(-10.0 * x);
-
 }
 
 
