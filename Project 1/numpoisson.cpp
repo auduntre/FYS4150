@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <cmath>
 #include <armadillo>
@@ -7,6 +8,7 @@
 
 int main(int argc, char **argv)
 {
+    arma::vec set_and_fill (unsigned int n, double filler);
     arma::vec poisson_solver (arma::vec f_vec, unsigned int n);
     arma::vec solver (arma::vec f_vec, arma::vec a, arma::vec b,
                       arma::vec c, unsigned int n);
@@ -25,15 +27,22 @@ int main(int argc, char **argv)
     arma::vec b;
     arma::vec c;
     
-    double hh;
-    double h;
-    int n;
-
     std::string nstr;
     std::string ustr;
     std::string vstr;
+
+    std::ofstream method_compare;
+
+    clock_t start;
+    clock_t end;
+    
+    double method_time;
+    double hh;
+    double h;
+    int n;
     
     n_vec << 10 << 100 << 1000 << 1000000 << 10000000;
+    
     for (int i = 0; i < n_vec.n_elem - 2; i++) {
         n = n_vec[i];
         h = 1. / ((double) n + 1);
@@ -41,16 +50,11 @@ int main(int argc, char **argv)
 
         x = arma::linspace<arma::vec>(0.0, 1.0, n+2);
         
-        a.set_size(n);
-        b.set_size(n);
-        c.set_size(n);
-        
-        a.fill(-1.0);
-        b.fill(2.0);
-        c.fill(-1.0);
+        a = set_and_fill(n, -1.0);
+        b = set_and_fill(n, 2.0);
+        c = a;
         
         f_vec.set_size(n);
-        v.set_size(n);
         u.set_size(n);
         re.set_size(n);
 
@@ -60,7 +64,6 @@ int main(int argc, char **argv)
         }
 
         v = solver(f_vec, a, b, c, n);
-        //v = poisson_solver(f_vec, n);
 
         // Saving re_max for later analysis
         for (int j = 0; j < n; j++) {
@@ -76,6 +79,49 @@ int main(int argc, char **argv)
         v.save(vstr, arma::raw_ascii);
     }
 
+    method_compare.open("method_compare.txt");
+    
+    for (int i = n_vec.n_elem - 3; i < n_vec.n_elem; i++) {
+        n = n_vec[i];
+        x = arma::linspace<arma::vec>(0.0, 1.0, n+2);
+
+        v.set_size(n);
+        f_vec.set_size(n);
+        a = set_and_fill(n, -1.0);
+        b = set_and_fill(n, 2.0);
+        c = set_and_fill(n, -1.0);
+        
+        h = 1.0 / (n + 1.0);
+        hh = h * h;
+
+        method_compare << "N = " << n << std::endl;
+
+        for (int  j = 0; j < n; j++) {
+            f_vec[j] = f(x[j+1]) * hh;
+        }
+
+        start = clock();
+        v = solver(f_vec, a, b, c, n);
+        end = clock();
+
+        method_time = (end - start) / CLOCKS_PER_SEC;
+        method_compare << "General solver = " << method_time <<
+                          " seconds." << std::endl;
+
+        v.set_size(n);
+        
+        start = clock();
+        v = poisson_solver(f_vec, n);
+        end = clock();
+
+        method_time = 1000 * (end - start) / CLOCKS_PER_SEC;
+        method_compare << "Poisson solver = " << method_time <<
+                          " seconds." << std::endl;
+       
+    }
+
+    method_compare.close();
+    
     return 0;
 }
 
@@ -133,4 +179,11 @@ double f(double x)
 double u_exact(double x)
 {
     return 1.0 - (1.0 - std::exp(-10.0)) * x - std::exp(-10 * x);
+}
+
+
+arma::vec set_and_fill(unsigned int n, double filler)
+{
+    arma::vec y(n);
+    return y.fill(filler);
 }
