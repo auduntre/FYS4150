@@ -25,11 +25,12 @@ def re_table():
     ns = [10**i for i in range(1, len(hs) + 1)]
 
     with open("results/re_table.txt", "w") as re_table:
-        header = "{:9}  |  {:17}  |  {:14}\n"
+        header = "{:9}  |  {:22}  |  {:14}\n"
         re_table.write(header.format("N:", "h:", "log(Re_max):"))
-        re_table.write("-----------|--------------------|----------------\n")
+        bar =  "-----------|--------------------------|----------------"
+        re_table.write(bar + "\n")
 
-        row_form = "{:>9}  |  {:.17g}  |  {:>14}\n"
+        row_form = "{:>9}  |  {:22.17g}  |  {:>14}\n"
         for n, re, hs in zip(ns, res, hs):
             re_table.write(row_form.format(n, hs, re))
 
