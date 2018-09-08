@@ -20,12 +20,11 @@ def uv_plot():
 
 
 def re_table():
-    ns = [10 ** i for i in range(1, 8)]
-    hs = [1.0 / (n + 1) for n in ns]
     res = np.loadtxt("results/re_max.txt")
+    ns = np.logspace(1, np.size(res), np.size(res), dtype=np.int)
 
     with open("results/re_table.txt", "w") as re_table:
-        re_table.write("{:9}  |  {:14}\n".format("N:", "Re_max:"))
+        re_table.write("{:9}  |  {:14}\n".format("N:", "log(Re_max):"))
         re_table.write("-----------|----------------\n")
 
         row_form = "{:>9}  |  {:>14}\n"

@@ -193,6 +193,6 @@ double relative_max_error(arma::vec u, arma::vec v)
 
 arma::vec set_and_fill(unsigned int n, double filler)
 {
-    arma::vec y(n);
-    return y.fill(filler);
+    arma::vec y = arma::ones<arma::vec>(n) * filler;
+    return y;
 }
