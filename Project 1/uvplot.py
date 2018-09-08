@@ -21,15 +21,17 @@ def uv_plot():
 
 def re_table():
     res = np.loadtxt("results/re_max.txt")
-    ns = np.logspace(1, np.size(res), np.size(res), dtype=np.int)
+    hs = np.loadtxt("results/h.txt");
+    ns = [10**i for i in range(1, len(hs) + 1)]
 
     with open("results/re_table.txt", "w") as re_table:
-        re_table.write("{:9}  |  {:14}\n".format("N:", "log(Re_max):"))
-        re_table.write("-----------|----------------\n")
+        header = "{:9}  |  {:17}  |  {:14}\n"
+        re_table.write(header.format("N:", "h:", "log(Re_max):"))
+        re_table.write("-----------|--------------------|----------------\n")
 
-        row_form = "{:>9}  |  {:>14}\n"
-        for n, re in zip(ns, res):
-            re_table.write(row_form.format(n, re))
+        row_form = "{:>9}  |  {:.17g}  |  {:>14}\n"
+        for n, re, hs in zip(ns, res, hs):
+            re_table.write(row_form.format(n, hs, re))
 
 
 if __name__ == "__main__":

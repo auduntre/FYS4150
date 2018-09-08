@@ -21,6 +21,8 @@ int main(int argc, char **argv)
              1000000 << 10000000;
     
     arma::vec re_max(n_vec.n_elem);
+    arma::vec h_vec(n_vec.n_elem);
+    
     arma::vec f_vec;
     arma::vec v;
     arma::vec u;
@@ -50,7 +52,8 @@ int main(int argc, char **argv)
         n = n_vec[i];
         h = 1. / ((double) n + 1);
         hh = h * h;
-        
+        h_vec[i] = h;
+
         a = set_and_fill(n, -1.0);
         b = set_and_fill(n, 2.0);
         c = a;
@@ -81,6 +84,7 @@ int main(int argc, char **argv)
         n = n_vec[i];
         h = 1.0 / (n + 1.0);
         hh = h * h;
+        h_vec[i] = h;
         
         x = arma::linspace<arma::vec>(h, 1.0 - h, n);
         u = u_exact(x);
@@ -124,6 +128,7 @@ int main(int argc, char **argv)
 
     re_max = arma::log10(re_max);
     re_max.save("results/re_max.txt", arma::raw_ascii);
+    h_vec.save("results/h.txt", arma::raw_ascii);
 
     return 0;
 }
