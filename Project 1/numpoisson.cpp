@@ -42,14 +42,14 @@ int main(int argc, char **argv)
     std::string ustr;
     std::string vstr;
 
-    // File for comparing poisson and general tridiagonal method
+    // File for comparing poisson and tridiag tridiagonal method
     std::ofstream method_compare;
     method_compare.open("results/method_compare.txt");
 
     clock_t start;
     clock_t end;
 
-    double general_time;
+    double tridiag_time;
     double LU_time;
     double poisson_time;
     double hh;
@@ -77,17 +77,17 @@ int main(int argc, char **argv)
         method_compare << "------------------------------" << std::endl;
         method_compare << "N = " << n << std::endl;
 
-        // Timing the general tridiagonal solver
-        general_time = 0;
+        // Timing the tridiag tridiagonal solver
+        tridiag_time = 0;
         for (int j = 0; j < time_runs; j++) {
             start = clock();
             v = tridiag_solver(f_vec, a, b, c, n);
             end = clock();
-            general_time += (double) (end - start) / CLOCKS_PER_SEC;
+            tridiag_time += (double) (end - start) / CLOCKS_PER_SEC;
         }
-        general_time /= (double) time_runs;
+        tridiag_time /= (double) time_runs;
 
-        method_compare << "General solver = " << general_time <<
+        method_compare << "tridiag solver = " << tridiag_time <<
                           " seconds." << std::endl;
 
         // Saving re_max for later analysis
@@ -136,8 +136,8 @@ int main(int argc, char **argv)
                               " seconds." << std::endl;
 
             method_compare << "Time of LU solver / " <<
-                              "Time of general solver = " <<
-                              LU_time / general_time << std::endl;
+                              "Time of tridiag solver = " <<
+                              LU_time / tridiag_time << std::endl;
         }
         else {
             // Timing the poisson special solver
@@ -154,8 +154,8 @@ int main(int argc, char **argv)
                               " seconds." << std::endl;
 
             method_compare << "Time of poisson solver / " <<
-                              "Time of general solver = " <<
-                              poisson_time / general_time << std::endl;
+                              "Time of tridag solver = " <<
+                              poisson_time / tridiag_time << std::endl;
         }
     }
 

@@ -1,35 +1,35 @@
 ------------------------------
 N = 10
-General solver = 7.77e-05 seconds.
-LU solver = 0.0005243 seconds.
-Time of LU solver / Time of general solver = 6.74775
+tridiag solver = 0.0002238 seconds.
+LU solver = 0.0006291 seconds.
+Time of LU solver / Time of tridiag solver = 2.81099
 ------------------------------
 N = 100
-General solver = 0.0002047 seconds.
-LU solver = 0.0136411 seconds.
-Time of LU solver / Time of general solver = 66.6395
+tridiag solver = 0.0003445 seconds.
+LU solver = 0.0270932 seconds.
+Time of LU solver / Time of tridiag solver = 78.645
 ------------------------------
 N = 1000
-General solver = 0.0008622 seconds.
-LU solver = 0.572874 seconds.
-Time of LU solver / Time of general solver = 664.433
+tridiag solver = 0.0008467 seconds.
+LU solver = 0.608984 seconds.
+Time of LU solver / Time of tridiag solver = 719.244
 ------------------------------
 N = 10000
-General solver = 0.0072037 seconds.
-LU solver = 110.156 seconds.
-Time of LU solver / Time of general solver = 15291.5
+tridiag solver = 0.0072046 seconds.
+LU solver = 111.339 seconds.
+Time of LU solver / Time of tridiag solver = 15453.9
 ------------------------------
 N = 100000
-General solver = 0.00287 seconds.
-Poisson solver = 0.001593 seconds.
-Time of poisson solver / Time of general solver = 0.555052
+tridiag solver = 0.0008002 seconds.
+Poisson solver = 0.0012991 seconds.
+Time of poisson solver / Time of tridag solver = 1.62347
 ------------------------------
 N = 1000000
-General solver = 0.0340966 seconds.
-Poisson solver = 0.0195028 seconds.
-Time of poisson solver / Time of general solver = 0.571987
+tridiag solver = 0.0302125 seconds.
+Poisson solver = 0.0210628 seconds.
+Time of poisson solver / Time of tridag solver = 0.697155
 ------------------------------
 N = 10000000
-General solver = 0.396115 seconds.
-Poisson solver = 0.244964 seconds.
-Time of poisson solver / Time of general solver = 0.618415
+tridiag solver = 0.37877 seconds.
+Poisson solver = 0.229634 seconds.
+Time of poisson solver / Time of tridag solver = 0.606261
