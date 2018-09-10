@@ -1,20 +1,35 @@
 ------------------------------
+N = 10
+General solver = 2.01e-05 seconds.
+LU solver = 0.0009923 seconds.
+Time of LU solver / Time of general solver = 49.3682
+------------------------------
+N = 100
+General solver = 0.0002449 seconds.
+LU solver = 0.0122823 seconds.
+Time of LU solver / Time of general solver = 50.1523
+------------------------------
+N = 1000
+General solver = 0.0008432 seconds.
+LU solver = 0.592336 seconds.
+Time of LU solver / Time of general solver = 702.486
+------------------------------
 N = 10000
-General solver = 0.0001607 seconds.
-Poisson solver = 0.0001483 seconds.
-Time of poisson solver / Time of general solver = 0.922838
+General solver = 0.0071758 seconds.
+LU solver = 108.921 seconds.
+Time of LU solver / Time of general solver = 15179
 ------------------------------
 N = 100000
-General solver = 0.0013101 seconds.
-Poisson solver = 0.0016634 seconds.
-Time of poisson solver / Time of general solver = 1.26967
+General solver = 0.0036138 seconds.
+Poisson solver = 0.0016175 seconds.
+Time of poisson solver / Time of general solver = 0.44759
 ------------------------------
 N = 1000000
-General solver = 0.0170915 seconds.
-Poisson solver = 0.0144554 seconds.
-Time of poisson solver / Time of general solver = 0.845765
+General solver = 0.0337932 seconds.
+Poisson solver = 0.0207794 seconds.
+Time of poisson solver / Time of general solver = 0.614899
 ------------------------------
 N = 10000000
-General solver = 0.251931 seconds.
-Poisson solver = 0.190899 seconds.
-Time of poisson solver / Time of general solver = 0.757744
+General solver = 0.396932 seconds.
+Poisson solver = 0.237026 seconds.
+Time of poisson solver / Time of general solver = 0.597146

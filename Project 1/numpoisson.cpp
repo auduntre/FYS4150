@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     arma::vec tridiag_solver (arma::vec f_vec, arma::vec a, arma::vec b,
                               arma::vec c, unsigned int n);
 
-    arma::vec n_vec;
+    arma::vec n_vec; // Vector with n values
     n_vec << 10 << 100 << 1000 << 10000 << 100000 <<
              1000000 << 10000000;
 
@@ -25,12 +25,17 @@ int main(int argc, char **argv)
 
     arma::vec f_vec;
     arma::vec v;
-    arma::vec u;
+    arma::vec u; // For exact solution
     arma::vec x;
 
+    // Tridiagonal entries in A as vectors
     arma::vec a;
     arma::vec b;
     arma::vec c;
+
+    arma::mat A; // Tridiagonal matrix with a, b, and c
+    arma::mat L; // For LU decomposition
+    arma::mat U; // For LU decomposition
 
     // Filenames for u and v text files
     std::string nstr;
@@ -51,10 +56,10 @@ int main(int argc, char **argv)
     double h;
 
     unsigned int n;
-    unsigned int k = 4; // For getting only wanted values of n_vec in the loop
+    unsigned int k = 3; // For getting only wanted values of n_vec in the loop
     unsigned int time_runs = 10;
 
-    for (int i = 0; i < n_vec.n_elem - k; i++) {
+    for (int i = 0; i < n_vec.n_elem; i++) {
         n = n_vec[i];
         h = 1. / ((double) n + 1);
         hh = h * h;
@@ -66,60 +71,13 @@ int main(int argc, char **argv)
         c = a;
 
         x = arma::linspace<arma::vec>(h, 1.0 - h, n);
-        u = u_exact(x);
-        f_vec = hh * f(x);
+        u = u_exact(x); // Vector with exact solution
+        f_vec = hh * f(x); // Vector with f hat values
 
-        // Timing the general tridiagonal solver
-        general_time = 0;
-        for (int j = 0; j < time_runs; j++) {
-            start = clock();
-            v = tridiag_solver(f_vec, a, b, c, n);
-            end = clock();
-            general_time += (double) (end - start) / CLOCKS_PER_SEC;
-        }
-        general_time /= (double) time_runs;
-
-        // Saving re_max for later analysis
-        re_max[i] = relative_max_error(u, v);
-
-        // Filenames for saved vectors
-        nstr = std::to_string(n) + ".txt";
-        ustr = "results/u" + nstr;
-        vstr = "results/v" + nstr;
-
-        u.save(ustr, arma::raw_ascii);
-        v.save(vstr, arma::raw_ascii);
-
-        // Timeing LU method
-        LU_time = 0;
-        for (int j = 0; j < time_runs; j++) {
-            start = clock();
-            end = clock();
-            LU_time += (double) (end - start) / CLOCKS_PER_SEC;
-        }
-        LU_time /= time_runs;
-
-    }
-
-
-    for (int i = n_vec.n_elem - k; i < n_vec.n_elem; i++) {
         method_compare << "------------------------------" << std::endl;
-
-        n = n_vec[i];
-        h = 1.0 / (n + 1.0);
-        hh = h * h;
-        h_vec[i] = h;
-
-        x = arma::linspace<arma::vec>(h, 1.0 - h, n);
-        u = u_exact(x);
-        f_vec = hh * f(x);
-
-        a = set_and_fill(n, -1.0);
-        b = set_and_fill(n, 2.0);
-        c = a;
-
         method_compare << "N = " << n << std::endl;
 
+        // Timing the general tridiagonal solver
         general_time = 0;
         for (int j = 0; j < time_runs; j++) {
             start = clock();
@@ -132,28 +90,73 @@ int main(int argc, char **argv)
         method_compare << "General solver = " << general_time <<
                           " seconds." << std::endl;
 
-        // Saving maximum relative error for this n
+        // Saving re_max for later analysis
         re_max[i] = relative_max_error(u, v);
+
+        if (n <= 1000) {
+            // Filenames for saved vectors
+            nstr = std::to_string(n) + ".txt";
+            ustr = "results/u" + nstr;
+            vstr = "results/v" + nstr;
+
+            // Saving vectors to be used for plotting
+            u.save(ustr, arma::raw_ascii);
+            v.save(vstr, arma::raw_ascii);
+        }
 
         // Reset v to make sure performance not impacted
         v.set_size(n);
 
-        // Timing the poisson special solver
-        poisson_time = 0;
-        for (int j = 0; j < time_runs; j++) {
-            start = clock();
-            v = poisson_solver(f_vec, n);
-            end = clock();
-            poisson_time += (double) (end - start) / CLOCKS_PER_SEC;
+        // Comparing with LU or poisson_solver
+        if (i < n_vec.n_elem - k) {
+
+            A = arma::eye<arma::mat>(n, n) * 2.0;
+            L = arma::mat(n, n);
+            U = arma::mat(n, n);
+
+            // filling tridiagonal indices not on the diagonal
+            for (int j = 0; j < n-1; j++) {
+                A(j+1, j) = -1.0;
+                A(j, j+1) = -1.0;
+            }
+
+            arma::lu(L, U, A);
+
+            // Timeing solving LU
+            LU_time = 0;
+            for (int j = 0; j < time_runs; j++) {
+                start = clock();
+                v = arma::solve(A, f_vec);
+                end = clock();
+                LU_time += (double) (end - start) / CLOCKS_PER_SEC;
+            }
+            LU_time /= time_runs;
+
+            method_compare << "LU solver = " << LU_time <<
+                              " seconds." << std::endl;
+
+            method_compare << "Time of LU solver / " <<
+                              "Time of general solver = " <<
+                              LU_time / general_time << std::endl;
         }
-        poisson_time /= (double) time_runs;
+        else {
+            // Timing the poisson special solver
+            poisson_time = 0;
+            for (int j = 0; j < time_runs; j++) {
+                start = clock();
+                v = poisson_solver(f_vec, n);
+                end = clock();
+                poisson_time += (double) (end - start) / CLOCKS_PER_SEC;
+            }
+            poisson_time /= (double) time_runs;
 
-        method_compare << "Poisson solver = " << poisson_time <<
-                          " seconds." << std::endl;
+            method_compare << "Poisson solver = " << poisson_time <<
+                              " seconds." << std::endl;
 
-        method_compare << "Time of poisson solver / " <<
-                          "Time of general solver = " <<
-                          poisson_time / general_time << std::endl;
+            method_compare << "Time of poisson solver / " <<
+                              "Time of general solver = " <<
+                              poisson_time / general_time << std::endl;
+        }
     }
 
     method_compare.close();
@@ -161,9 +164,6 @@ int main(int argc, char **argv)
     re_max = arma::log10(re_max);
     re_max.save("results/re_max.txt", arma::raw_ascii);
     h_vec.save("results/h.txt", arma::raw_ascii);
-
-
-
     return 0;
 }
 
