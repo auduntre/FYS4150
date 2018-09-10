@@ -197,7 +197,7 @@ arma::vec poisson_solver(arma::vec f_vec, unsigned int n)
     //Forward subst
     b[0] = 2.0;
     for (int i = 1; i < n; i++) {
-        b[i] = 2.0 - 1 / b[i-1];
+        b[i] = 2.0 - 1.0 / b[i-1];
         f_vec[i] = f_vec[i] + (f_vec[i-1] / b[i-1]);
     }
 
