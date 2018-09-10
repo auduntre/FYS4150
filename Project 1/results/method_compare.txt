@@ -1,35 +1,35 @@
 ------------------------------
 N = 10
-General solver = 2.01e-05 seconds.
-LU solver = 0.0009923 seconds.
-Time of LU solver / Time of general solver = 49.3682
+General solver = 7.77e-05 seconds.
+LU solver = 0.0005243 seconds.
+Time of LU solver / Time of general solver = 6.74775
 ------------------------------
 N = 100
-General solver = 0.0002449 seconds.
-LU solver = 0.0122823 seconds.
-Time of LU solver / Time of general solver = 50.1523
+General solver = 0.0002047 seconds.
+LU solver = 0.0136411 seconds.
+Time of LU solver / Time of general solver = 66.6395
 ------------------------------
 N = 1000
-General solver = 0.0008432 seconds.
-LU solver = 0.592336 seconds.
-Time of LU solver / Time of general solver = 702.486
+General solver = 0.0008622 seconds.
+LU solver = 0.572874 seconds.
+Time of LU solver / Time of general solver = 664.433
 ------------------------------
 N = 10000
-General solver = 0.0071758 seconds.
-LU solver = 108.921 seconds.
-Time of LU solver / Time of general solver = 15179
+General solver = 0.0072037 seconds.
+LU solver = 110.156 seconds.
+Time of LU solver / Time of general solver = 15291.5
 ------------------------------
 N = 100000
-General solver = 0.0036138 seconds.
-Poisson solver = 0.0016175 seconds.
-Time of poisson solver / Time of general solver = 0.44759
+General solver = 0.00287 seconds.
+Poisson solver = 0.001593 seconds.
+Time of poisson solver / Time of general solver = 0.555052
 ------------------------------
 N = 1000000
-General solver = 0.0337932 seconds.
-Poisson solver = 0.0207794 seconds.
-Time of poisson solver / Time of general solver = 0.614899
+General solver = 0.0340966 seconds.
+Poisson solver = 0.0195028 seconds.
+Time of poisson solver / Time of general solver = 0.571987
 ------------------------------
 N = 10000000
-General solver = 0.396932 seconds.
-Poisson solver = 0.237026 seconds.
-Time of poisson solver / Time of general solver = 0.597146
+General solver = 0.396115 seconds.
+Poisson solver = 0.244964 seconds.
+Time of poisson solver / Time of general solver = 0.618415
