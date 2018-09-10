@@ -13,8 +13,11 @@ def uv_plot():
         x = np.linspace(0, 1, n+2)
 
         # TODO: add legends!
-        plt.plot(x[1:-1], u)
-        plt.plot(x[1:-1], v, 'r--')
+        plt.rc('text', usetex=True)
+        plt.title(r"$u(x_i)$ vs $v_i$ for $N = {}$".format(n))
+        plt.plot(x[1:-1], u, label=r"$u(x_i)$")
+        plt.plot(x[1:-1], v, 'r--', label=r"$v_i$")
+        plt.legend()
         plt.savefig("results/uvplot" + str(n) + ".png")
         plt.figure()
 
