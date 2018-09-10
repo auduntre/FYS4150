@@ -1,35 +1,35 @@
 ------------------------------
 N = 10
-tridiag solver = 0.0002238 seconds.
-LU solver = 0.0006291 seconds.
-Time of LU solver / Time of tridiag solver = 2.81099
+tridiag solver = 3.88e-05 seconds.
+LU solver = 0.000631 seconds.
+Time of LU solver / Time of tridiag solver = 16.2629
 ------------------------------
 N = 100
-tridiag solver = 0.0003445 seconds.
-LU solver = 0.0270932 seconds.
-Time of LU solver / Time of tridiag solver = 78.645
+tridiag solver = 0.0001184 seconds.
+LU solver = 0.0052313 seconds.
+Time of LU solver / Time of tridiag solver = 44.1833
 ------------------------------
 N = 1000
-tridiag solver = 0.0008467 seconds.
-LU solver = 0.608984 seconds.
-Time of LU solver / Time of tridiag solver = 719.244
+tridiag solver = 0.0013153 seconds.
+LU solver = 0.537165 seconds.
+Time of LU solver / Time of tridiag solver = 408.397
 ------------------------------
 N = 10000
-tridiag solver = 0.0072046 seconds.
-LU solver = 111.339 seconds.
-Time of LU solver / Time of tridiag solver = 15453.9
+tridiag solver = 0.0069365 seconds.
+LU solver = 108.053 seconds.
+Time of LU solver / Time of tridiag solver = 15577.4
 ------------------------------
 N = 100000
-tridiag solver = 0.0008002 seconds.
-Poisson solver = 0.0012991 seconds.
-Time of poisson solver / Time of tridag solver = 1.62347
+tridiag solver = 0.0028485 seconds.
+Poisson solver = 0.0014547 seconds.
+Time of poisson solver / Time of tridag solver = 0.51069
 ------------------------------
 N = 1000000
-tridiag solver = 0.0302125 seconds.
-Poisson solver = 0.0210628 seconds.
-Time of poisson solver / Time of tridag solver = 0.697155
+tridiag solver = 0.0336595 seconds.
+Poisson solver = 0.0188052 seconds.
+Time of poisson solver / Time of tridag solver = 0.558689
 ------------------------------
 N = 10000000
-tridiag solver = 0.37877 seconds.
-Poisson solver = 0.229634 seconds.
-Time of poisson solver / Time of tridag solver = 0.606261
+tridiag solver = 0.38455 seconds.
+Poisson solver = 0.23 seconds.
+Time of poisson solver / Time of tridag solver = 0.598102
