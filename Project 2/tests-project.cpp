@@ -1,17 +1,7 @@
-#include <armadillo>
-#include <cmath>
-
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
-
-arma::uword maxoffdiag (arma::mat X)
-{
-    // Set diag to zero and find index of extreme value in matrix
-    return arma::abs(arma::trimatu(X)).index_max();
-}
-
-
+#include "jacobi.h"
 
 TEST_CASE ("Implementation of maximum off-diagonal absolute value method", 
            "[maxoffdiag]") 
