@@ -1,7 +1,7 @@
 #include <armadillo>
 #include <cmath>
 
-#include "jacobi.h"
+#include "project.h"
 
 arma::uword maxoffdiag (arma::mat X)
 {

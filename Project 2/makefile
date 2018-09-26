@@ -1,11 +1,11 @@
-CC=g++
-CFLAGS=-std=c++11 -larmadillo -O3
-DEPS = jacobi.h
-OBJ = jacobi.o tests-project.o
+CXX=g++
+CXXFLAGS=-std=c++11 -larmadillo -O3
+DEPS = project.h
+OBJ = project.o
+TESTS = tests-project.o tests-main.o
 
 %.o: %.cpp $(DEPS)
-        $(CC) -c -o $@ $< $(CFLAGS)
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-test: jacobi.cpp
-	$(CC) -o jacobi jacobi.cpp $(CFLAGS)
-
+tests: $(OBJ) $(TESTS)
+	$(CXX) $(OBJ) $(TESTS) $(CXXFLAGS) -o $@ 

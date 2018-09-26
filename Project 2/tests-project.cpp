@@ -1,7 +1,7 @@
-#define CATCH_CONFIG_MAIN
-#include <catch.hpp>
+#include "catch.hpp"
 
-#include "jacobi.h"
+#include <armadillo>
+#include "project.h"
 
 TEST_CASE ("Implementation of maximum off-diagonal absolute value method", 
            "[maxoffdiag]") 
