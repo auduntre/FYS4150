@@ -8,4 +8,7 @@ TESTS = tests-project.o tests-main.o
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 tests: $(OBJ) $(TESTS)
-	$(CXX) $(OBJ) $(TESTS) $(CXXFLAGS) -o $@ 
+	$(CXX) $^ $(CXXFLAGS) -o $@
+
+clean:
+	rm $(OBJ) $(TESTS) tests
