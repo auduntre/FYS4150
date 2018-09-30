@@ -113,7 +113,8 @@ TEST_CASE ("Test of jacobi's rotation algorithm on a Toeplitz matrix",
     double eps = 1.0E-12;
     double dps = 1.0E-8;
 
-    arma::mat A = sym_tridiag(-3.0, 2.0, 10);
+    Tridiag td(-3.0, 2.0, 10);
+    arma::mat A = td.get_matrix();
     arma::mat Ev(A.n_rows, A.n_cols, arma::fill::eye);
 
     arma::mat eigvec;

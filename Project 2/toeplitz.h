@@ -5,8 +5,6 @@
 
 typedef unsigned uint;
 
-arma::mat sym_tridiag (double a, double d, uint N);
-
 class Tridiag
 {
     private:
