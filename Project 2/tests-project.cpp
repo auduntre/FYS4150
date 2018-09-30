@@ -4,7 +4,7 @@
 #include "jacobi.h"
 #include "toeplitz.h"
 
-bool equalcolumns(arma::mat A, arma::mat B, double eps)
+bool equalcolumns (arma::mat A, arma::mat B, double eps)
 {
     bool column_k;
 
@@ -30,7 +30,7 @@ bool equalcolumns(arma::mat A, arma::mat B, double eps)
 }
 
 
-bool orthogonal(arma::mat R, double eps)
+bool orthogonal (arma::mat R, double eps)
 {
     arma::mat Reye(R.n_rows, R.n_cols);
     Reye.eye();
