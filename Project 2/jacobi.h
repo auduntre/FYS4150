@@ -5,10 +5,10 @@
 
 typedef unsigned uint;
 
-arma::mat jacobi (arma::mat A, double eps, uint maxiter);
+arma::vec jacobi (arma::mat A, arma::mat *Ev, double eps);
 
-arma::mat rotate (arma::mat B, uint k, uint l);
+arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l);
 
-double maxoffdiag (arma::mat X);
+double maxoffdiag (arma::mat X, uint *i, uint *j);
 
 #endif

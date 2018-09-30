@@ -4,35 +4,46 @@
 #include "jacobi.h"
 
 
-arma::mat jacobi (arma::mat A, double eps, uint maxiter) 
+arma::vec jacobi (arma::mat A, arma::mat *Ev, double eps) 
 {
     double maxoffdiag (arma::mat X, uint *i, uint *j);
-    arma::mat rotate (arma::mat B, uint k, uint l);
-
-    arma::mat B = A;
+    arma::mat rotate (arma::mat A, arma::mat *Ev, uint k, uint l);
 
     double maxval;
 
     uint maxi;
     uint maxj;
+    uint maxiter = A.n_rows * A.n_rows * A.n_rows;
     uint iter = 0;
 
-    maxval = maxoffdiag(B, &maxi, &maxj);
+    maxval = maxoffdiag(A, &maxi, &maxj);
 
     while (maxval > eps && maxiter > iter) {
-        B = rotate(B, maxi, maxj);
-        maxval = maxoffdiag(B, &maxi, &maxj);
+        A = rotate(A, Ev, maxi, maxj);
+        maxval = maxoffdiag(A, &maxi, &maxj);
         iter++;
     }
 
-    return B;
+    if (iter >= maxiter) {
+        std::cout << "Did not converge to max offdiagnonal element <= " << eps
+                  << " for " << maxiter << " iterations." << std::endl;
+    } else {
+        std::cout << "Solution found in " << iter 
+                  << " iterations." << std::endl;
+    }
+    
+    return A.diag();
 }
 
 
-arma::mat rotate (arma::mat B, uint k, uint l)
+arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l)
 {
+    arma::mat R = *Ev;
+
     arma::vec aik = B.col(k);
     arma::vec ail = B.col(l);
+    arma::vec rik = R.col(k);
+    arma::vec ril = R.col(l);
     arma::uvec indices;
 
     double akl = B(k, l);
@@ -72,11 +83,19 @@ arma::mat rotate (arma::mat B, uint k, uint l)
     B(l,k) = 0.0;
     
     for (arma::uword i: indices) {
-            B(i,k) = cosw * aik(i) - sinw * ail(i);
-            B(k,i) = B(i,k);
-            B(i,l) = cosw * ail(i) + sinw * aik(i);
-            B(l,i) = B(i,l);
+        B(i,k) = cosw * aik(i) - sinw * ail(i);
+        B(i,l) = cosw * ail(i) + sinw * aik(i);
     }
+
+    for (uint i = 0; i < B.n_rows; i++) {
+        R(i,k) = cosw * rik(i) - sinw * ril(i);
+        R(i,l) = cosw * ril(i) + sinw * rik(i);
+    }
+
+    B.row(k) = B.col(k).t();
+    B.row(l) = B.col(l).t();
+    
+    *Ev = R;
 
     return B;
 }

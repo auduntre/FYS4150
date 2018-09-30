@@ -2,20 +2,21 @@
 
 #include "jacobi.h"
 
+
 int main(int argc, char **argv)
 {
     arma::arma_rng::set_seed_random();
 
-    arma::mat A(10, 10);
+    uint n = 200;
+
+    arma::mat A(n, n);
+    arma::mat Ev(n, n);
+    
     A.randu();
     A = A.t() * A;
+    Ev.eye();
 
-    arma::vec eigval = arma::eig_sym(A);
+    arma::vec jacobival = jacobi(A, &Ev, 1.0E-12);
 
-    A = jacobi(A, 1.0E-12, 10000);
-    A.diag().print();
-    std::cout << "-----------------------------------" << std::endl;
-
-    eigval.print();
     return 0;
 }
