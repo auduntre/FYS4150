@@ -60,8 +60,7 @@ TEST_CASE ("Implementation of maximum off-diagonal absolute value method",
     
     SECTION ("Testing if right index") {
         maxoffdiag(A, &i, &j);
-        REQUIRE ((i == n/4 && j == n/3)); // Check if right index
-    }
+        REQUIRE ((i == n/4 && j == n/3));
     SECTION ("Testing if right value") {
         REQUIRE (maxoffdiag(A, &i, &j) == big);
     }
