@@ -12,10 +12,9 @@ int main(int argc, char **argv)
 
     arma::vec eigval = arma::eig_sym(A);
 
-    A.print();
-    A = jacobi(A, 1.0E-16, 10000);
-    std::cout << "-----------------------------------" << std::endl;
+    A = jacobi(A, 1.0E-12, 10000);
     A.diag().print();
+    std::cout << "-----------------------------------" << std::endl;
 
     eigval.print();
     return 0;
