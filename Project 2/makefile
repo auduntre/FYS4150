@@ -1,7 +1,7 @@
 CXX=g++
 CXXFLAGS=-std=c++11 -larmadillo -O3
-DEPS = jacobi.h
-DEPSOBJ = jacobi.o
+DEPS = jacobi.h toeplitz.h
+DEPSOBJ = jacobi.o toeplitz.o
 OBJ1 = buckling_beam.o
 TESTS = tests-project.o
 TESTMAIN = tests-main.o
@@ -12,11 +12,11 @@ TESTMAIN = tests-main.o
 bb: $(DEPSOBJ) $(OBJ1)
 	$(CXX) $^ $(CXXFLAGS) -o $@
 
-tests: $(DEPSOBJ) $(TESTS) $(TESTMAIN)
+tests: $(DEPSOBJ) $(TESTMAIN) $(TESTS) 
 	$(CXX) $^ $(CXXFLAGS) -o $@
 
 clean:
-	rm $(OBJ) $(DEPSOBJ) $(TESTS) tests main
+	rm $(OBJ1) $(DEPSOBJ) $(TESTS) tests bb
 
 cleanall:
-	rm $(OBJ) $(DEPSOBJ) $(TESTS) $(TESTMAIN) tests bb
+	rm $(OBJ1) $(DEPSOBJ) $(TESTS) $(TESTMAIN) tests bb

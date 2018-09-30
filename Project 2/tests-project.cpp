@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "jacobi.h"
-
+#include "toeplitz.h"
 
 bool equalcolumns(arma::mat A, arma::mat B, double eps)
 {
@@ -33,7 +33,7 @@ bool equalcolumns(arma::mat A, arma::mat B, double eps)
 bool orthogonal(arma::mat R, double eps)
 {
     arma::mat Reye(R.n_rows, R.n_cols);
-    Reye.eye(); 
+    Reye.eye();
 
     if (arma::approx_equal(R.t() * R, Reye, "absdiff", eps)) {
         return true;
@@ -61,14 +61,14 @@ TEST_CASE ("Implementation of maximum off-diagonal absolute value method",
     SECTION ("Testing if right index") {
         maxoffdiag(A, &i, &j);
         REQUIRE ((i == n/4 && j == n/3));
+    }
     SECTION ("Testing if right value") {
         REQUIRE (maxoffdiag(A, &i, &j) == big);
     }
 }
 
 
-TEST_CASE ("Test implementation of Jacobi's rotation algorithm", 
-           "[jacobi]")
+TEST_CASE ("Test implementation of Jacobi's rotation algorithm", "[jacobi]")
 {
     bool equalcolumns(arma::mat A, arma::mat B, double eps);
     bool orthogonal(arma::mat R, double eps);
@@ -76,7 +76,7 @@ TEST_CASE ("Test implementation of Jacobi's rotation algorithm",
     double eps = 1.0E-12;
     double dps = 1.0E-8;
 
-    int n = 100;
+    int n = 10;
 
     arma::mat A(n ,n);
     arma::mat Ev(n, n);
@@ -89,6 +89,37 @@ TEST_CASE ("Test implementation of Jacobi's rotation algorithm",
     arma::vec eigval;
     arma::vec jacobival;
     
+    arma::eig_sym(eigval, eigvec, A);
+    jacobival = arma::sort(jacobi(A, &Ev, eps));
+
+    SECTION ("Testing if right eigenvalues") {
+        REQUIRE (arma::approx_equal(jacobival, eigval, "absdiff", dps));
+    }
+    SECTION ("Testing if right eigenvetors") {
+        REQUIRE (equalcolumns(Ev, eigvec, dps));
+    }
+    SECTION ("Testing if eigenvectors have orthogonality preserved") {
+        REQUIRE (orthogonal(Ev, dps));
+    }
+}
+
+
+TEST_CASE ("Test of jacobi's rotation algorithm on a Toeplitz matrix",
+           "[toeplitz]")
+{
+    bool equalcolumns(arma::mat A, arma::mat B, double eps);
+    bool orthogonal(arma::mat R, double eps);
+
+    double eps = 1.0E-12;
+    double dps = 1.0E-8;
+
+    arma::mat A = sym_tridiag(-3.0, 2.0, 10);
+    arma::mat Ev(A.n_rows, A.n_cols, arma::fill::eye);
+
+    arma::mat eigvec;
+    arma::vec eigval;
+    arma::vec jacobival;
+
     arma::eig_sym(eigval, eigvec, A);
     jacobival = arma::sort(jacobi(A, &Ev, eps));
 

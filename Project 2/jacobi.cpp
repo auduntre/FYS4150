@@ -64,9 +64,12 @@ arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l)
 
     if (akl != 0.0 ) {   
         tau = (all - akk) / (2 * akl);
-        sign = tau / std::fabs(tau);
-
-        tanw = sign / (std::fabs(tau) + std::sqrt(1.0 + tau*tau));
+        
+        if (tau > 0.0) {
+            tanw = 1.0 / (tau + std::sqrt(1.0 + tau*tau));
+        } else {
+            tanw = -1.0 / (-tau + std::sqrt(1.0 + tau*tau));
+        }
 
         cosw = 1 / std::sqrt(1 + tanw * tanw);
         sinw = cosw*tanw;
@@ -82,7 +85,7 @@ arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l)
     B(k,l) = 0.0;
     B(l,k) = 0.0;
     
-    for (arma::uword i: indices) {
+    for (uint i: indices) {
         B(i,k) = cosw * aik(i) - sinw * ail(i);
         B(i,l) = cosw * ail(i) + sinw * aik(i);
     }
@@ -108,6 +111,10 @@ double maxoffdiag (arma::mat X, uint *i, uint *j)
 
     *j = ij / X.n_rows;
     *i = ij - (*j) * X.n_rows;
-
-    return std::fabs(X(ij));
+    
+    if (ij == 0) {
+        return 0.0;
+    } else {
+        return std::fabs(X(ij));
+    }
 }
