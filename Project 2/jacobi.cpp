@@ -88,12 +88,16 @@ arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l)
     for (uint i: indices) {
         B(i,k) = cosw * aik(i) - sinw * ail(i);
         B(i,l) = cosw * ail(i) + sinw * aik(i);
-    }
 
-    for (uint i = 0; i < B.n_rows; i++) {
         R(i,k) = cosw * rik(i) - sinw * ril(i);
         R(i,l) = cosw * ril(i) + sinw * rik(i);
     }
+
+    R(k,k) = cosw * rik(k) - sinw * ril(k);
+    R(k,l) = cosw * ril(k) + sinw * rik(k);
+
+    R(l,k) = cosw * rik(l) - sinw * ril(l);
+    R(l,l) = cosw * ril(l) + sinw * rik(l);
 
     B.row(k) = B.col(k).t();
     B.row(l) = B.col(l).t();

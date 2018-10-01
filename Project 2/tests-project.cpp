@@ -68,7 +68,7 @@ TEST_CASE ("Implementation of maximum off-diagonal absolute value method",
 }
 
 
-TEST_CASE ("Test implementation of Jacobi's rotation algorithm", "[jacobi]")
+TEST_CASE ("Implementation of Jacobi's rotation algorithm", "[jacobi]")
 {
     bool equalcolumns(arma::mat A, arma::mat B, double eps);
     bool orthogonal(arma::mat R, double eps);

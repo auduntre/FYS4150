@@ -85,5 +85,5 @@ arma::vec analy_eigval(double a, double d, uint N)
     arma::vec js = arma::linspace<arma::vec>(1, N-1, N-1);
     arma::vec lambda(N-1);
 
-    return d + 2 * a * arma::cos(js * arma::datum::pi/ N);
+    return d + 2 * a * arma::cos(js * arma::datum::pi / N);
 }
