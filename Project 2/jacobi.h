@@ -2,6 +2,7 @@
 #define JACOBI_H
 
 #include <armadillo>
+#include <cmath>
 
 typedef unsigned uint;
 

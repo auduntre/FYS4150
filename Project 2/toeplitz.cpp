@@ -1,5 +1,4 @@
 #include "toeplitz.h"
-#include <iostream>
 
 Tridiag::Tridiag (double aconst, double dconst, uint N)
 {

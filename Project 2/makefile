@@ -1,7 +1,7 @@
 CXX=g++
 CXXFLAGS=-std=c++11 -larmadillo -O3
 DEPS = jacobi.h toeplitz.h
-DEPSOBJ = jacobi.o toeplitz.o
+DEPSOBJ = jacobi.o toeplitz.o haroscill.o
 OBJ1 = buckling_beam.o
 OBJ2 = quantum_dots.o
 TESTS = tests-project.o
@@ -16,7 +16,7 @@ bb: $(DEPSOBJ) $(OBJ1)
 qd: $(DEPSOBJ) $(OBJ2)
 	$(CXX) $^ $(CXXFLAGS) -o $@
 
-tests: $(DEPSOBJ) $(TESTMAIN) $(TESTS) 
+tests: $(DEPSOBJ) $(TESTMAIN) $(TESTS)
 	$(CXX) $^ $(CXXFLAGS) -o $@
 
 clean:
