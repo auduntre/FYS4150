@@ -1,5 +1,4 @@
 #include <iostream>
-#include <iomanip>
 #include <cstdlib>
 #include <cmath>
 #include <string>
@@ -8,12 +7,11 @@
 #include "toeplitz.h"
 
 
-int main(int argc, char **argv)
+int main (int argc, char **argv)
 {
-    arma::vec analy_eigval(uint N);
-    
+    void one_electron (uint N, double rhoN);
+
     uint N = 100;
-    
     if (argc > 1) {
         N = std::atoi(argv[1]);
     }
@@ -25,6 +23,16 @@ int main(int argc, char **argv)
         rhoN = std::atof(argv[2]);
     }
 
+    one_electron(N, rhoN);
+
+    return 0;
+}
+
+
+void one_electron (uint N, double rhoN)
+{
+    arma::vec analy_eigval(uint N);
+    
     double h = rhoN  / N;
 
     double dconst = 2.0 / (h * h);
@@ -57,11 +65,11 @@ int main(int argc, char **argv)
 
     tmp.save(tmpname, arma::raw_ascii);
 
-    return 0;
+    return;
 }
 
 
-arma::vec analy_eigval(uint N)
+arma::vec analy_eigval (uint N)
 {
     return arma::linspace<arma::vec>(3.0, 3.0 + 4.0*(N-2), N-1);
 }

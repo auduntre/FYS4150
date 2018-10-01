@@ -20,7 +20,7 @@ tests: $(DEPSOBJ) $(TESTMAIN) $(TESTS)
 	$(CXX) $^ $(CXXFLAGS) -o $@
 
 clean:
-	rm $(OBJ1) $(DEPSOBJ) $(TESTS) tests bb
+	rm $(OBJ1) $(OBJ2) $(DEPSOBJ) $(TESTS) tests bb qd
 
 cleanall:
-	rm $(OBJ1) $(DEPSOBJ) $(TESTS) $(TESTMAIN) tests bb
+	rm $(OBJ1) $(OBJ2) $(DEPSOBJ) $(TESTS) $(TESTMAIN) tests bb qd
