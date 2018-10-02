@@ -15,6 +15,7 @@ int main (int argc, char **argv)
     void two_electrons (uint N, double rhoN);
 
     double omegas[4] = {0.01, 0.50, 1.00, 5.00};
+    uint ns[7] = {10, 25, 50, 75, 100, 150, 200};
 
     uint N = 100;
     uint jmin;
@@ -40,14 +41,17 @@ int main (int argc, char **argv)
     std::string eigcname; // eigenvector
     std::ofstream eigvaluefile;
 
+    for (uint n: ns) {
+        Harmonic_oscillator hon = Harmonic_oscillator(rhoN, n);
+
+        tmpname = "results/approxN" + std::to_string(n) + \
+                  "rhoN" + std::to_string((uint) rhoN) + ".txt";
+
+        tmp = hon.one_electron();
+        tmp.save(tmpname, arma::raw_ascii);
+    }
 
     Harmonic_oscillator ho = Harmonic_oscillator(rhoN, N);
-
-    tmpname = "results/approxN" + std::to_string(N) + \
-              "rhoN" + std::to_string((uint) rhoN) + ".txt";
-
-    tmp = ho.one_electron();
-    tmp.save(tmpname, arma::raw_ascii);
 
     for (double omega: omegas) {
         Ev.eye();
