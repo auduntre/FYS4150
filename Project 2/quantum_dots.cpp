@@ -70,7 +70,5 @@ int main (int argc, char **argv)
         evmin.save(eigcname, arma::raw_ascii);
     }
 
-
-
     return 0;
 }
