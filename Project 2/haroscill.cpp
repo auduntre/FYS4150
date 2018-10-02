@@ -53,10 +53,10 @@ arma::vec Harmonic_oscillator::two_electrons(arma::mat *Ev, double omega,
     arma::mat A(N-1, N-1);
 
     arma::vec jeigval(N-1);
-    arma::vec dvar = omega * this->Vi;
+    arma::vec dvar =  this->Vi;
 
     if (inter == true) {
-        dvar = dvar + 1 / this->rho;
+        dvar = omega * dvar + 1 / this->rho;
     }
 
     Tridiag td(this->econst, this->dconst, N-1);

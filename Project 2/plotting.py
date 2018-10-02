@@ -17,16 +17,15 @@ def plot_two_electron():
     first = True
     for omega in omegas:
         ev = np.loadtxt(filenamevec + omega + ext)
-        el = np.loadtxt(filenameval + omega + ext)
-        psi2 = el * ev**2
+        psi2 = ev**2
 
         if first:
-            x = np.linspace(0, 5.0, psi2.size)
+            rho = np.linspace(0, 5.0, psi2.size)
             psi2inter = psi2
             first = False
 
         cl = r"$\omega_r$ = " + omega
-        plt.plot(x, psi2, label=cl)
+        plt.plot(rho, psi2, label=cl)
     
     plt.title(r"Relative energy of ground state")
     plt.ylabel(r"$|\psi (\rho)|^2$")
@@ -35,8 +34,18 @@ def plot_two_electron():
     plt.legend()
     plt.show()
 
+    ev = np.loadtxt("results/noninteractionvector.txt")
+    psi2non = ev**2
 
-    plt.
+    plt.title(r"With and without Coulomb interaction $(\omega = 0.01)$")
+    plt.ylabel(r"$|\psi (\rho)|^2$")
+    plt.xlabel(r"$\rho$")
+
+    plt.plot(rho, psi2inter, label="interacting")
+    plt.plot(rho, psi2non, label="non-interacting")
+
+    plt.legend()
+    plt.show()
 
 
 if __name__ == '__main__':
