@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
 #include <cmath>
 #include <string>
 
@@ -16,6 +17,7 @@ int main (int argc, char **argv)
     double omegas[4] = {0.01, 0.50, 1.00, 5.00};
 
     uint N = 100;
+    uint jmin;
 
     // Value thats spits out good approx to analytical eigenvalues
     double rhoN = 5.00;
@@ -31,8 +33,12 @@ int main (int argc, char **argv)
     arma::mat Ev(N-1, N-1, arma::fill::eye);
     arma::vec jeigval(N-1);
     arma::vec tmp;
-    
+    arma::vec evmin;
+
     std::string tmpname;
+    std::string eiglname; // eigenvalue
+    std::string eigcname; // eigenvector
+    std::ofstream eigvaluefile;
 
 
     Harmonic_oscillator ho = Harmonic_oscillator(rhoN, N);
@@ -45,10 +51,26 @@ int main (int argc, char **argv)
     tmp.save(tmpname, arma::raw_ascii);
 
     for (double omega: omegas) {
-        jeigval = ho.two_electrons(&Ev, omegas[0]);
+        eigcname = "results/eigvector" + std::to_string(N) + \
+                   "rhoN" + std::to_string((uint) rhoN) + \
+                   "omega" + std::to_string(omega) + ".txt";
 
-        jeigval.print();
+        eiglname = "results/eigvalue" + std::to_string(N) + \
+                   "rhoN" + std::to_string((uint) rhoN) + \
+                   "omega" + std::to_string(omega) + ".txt";
+
+        jeigval = ho.two_electrons(&Ev, omegas[0], true);
+        jmin = jeigval.index_min();
+
+        eigvaluefile.open(eiglname);
+        eigvaluefile << jeigval(jmin) << std::endl;
+        eigvaluefile.close();
+
+        evmin = Ev.col(jmin);
+        evmin.save(eigcname, arma::raw_ascii);
     }
+
+
 
     return 0;
 }

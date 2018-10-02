@@ -24,7 +24,7 @@ class Harmonic_oscillator
         Harmonic_oscillator(double rhoN, uint N);
 
         arma::vec one_electron ();
-        arma::vec two_electrons (arma::mat *Ev, double omega);
+        arma::vec two_electrons (arma::mat *Ev, double omega, bool inter);
 
         arma::vec analy_eigval_one_election();
 };

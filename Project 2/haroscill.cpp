@@ -45,14 +45,19 @@ arma::vec Harmonic_oscillator::one_electron()
 }
 
 
-arma::vec Harmonic_oscillator::two_electrons(arma::mat *Ev, double omega)
+arma::vec Harmonic_oscillator::two_electrons(arma::mat *Ev, double omega,
+                                            bool inter)
 {
     uint N = this->N;
 
     arma::mat A(N-1, N-1);
 
     arma::vec jeigval(N-1);
-    arma::vec dvar = omega * this->Vi + 1 / this->rho;
+    arma::vec dvar = omega * this->Vi;
+
+    if (inter) {
+        dvar = dvar + 1 / this->rho;
+    }
 
     Tridiag td(this->econst, this->dconst, N-1);
     td.set_variable_diags(dvar);
