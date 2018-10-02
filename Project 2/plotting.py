@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def main():
+def plot_two_electron():
     filenamevec = "results/eigvector100rhoN5omega"
     filenameval = "results/eigvalue100rhoN5omega"
 
@@ -14,11 +14,16 @@ def main():
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
 
+    first = True
     for omega in omegas:
         ev = np.loadtxt(filenamevec + omega + ext)
         el = np.loadtxt(filenameval + omega + ext)
         psi2 = el * ev**2
-        x = np.linspace(0, 5.0, psi2.size)
+
+        if first:
+            x = np.linspace(0, 5.0, psi2.size)
+            psi2inter = psi2
+            first = False
 
         cl = r"$\omega_r$ = " + omega
         plt.plot(x, psi2, label=cl)
@@ -31,5 +36,8 @@ def main():
     plt.show()
 
 
+    plt.
+
+
 if __name__ == '__main__':
-    main()
+    plot_two_electron()

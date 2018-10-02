@@ -71,5 +71,17 @@ int main (int argc, char **argv)
         evmin.save(eigcname, arma::raw_ascii);
     }
 
+    Ev.eye();
+
+    jeigval = ho.two_electrons(&Ev, omegas[0], false);
+    jmin = jeigval.index_min();
+
+    eigvaluefile.open("results/noninteracting.txt");
+    eigvaluefile << jeigval(jmin) << std::endl;
+    eigvaluefile.close();
+
+    evmin = Ev.col(jmin);
+    evmin.save("results/noninteractionvector.txt", arma::raw_ascii);
+
     return 0;
 }
