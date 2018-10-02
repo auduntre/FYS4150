@@ -46,11 +46,12 @@ int main (int argc, char **argv)
     tmpname = "results/approxN" + std::to_string(N) + \
               "rhoN" + std::to_string((uint) rhoN) + ".txt";
 
-
     tmp = ho.one_electron();
     tmp.save(tmpname, arma::raw_ascii);
 
     for (double omega: omegas) {
+        Ev.eye();
+
         eigcname = "results/eigvector" + std::to_string(N) + \
                    "rhoN" + std::to_string((uint) rhoN) + \
                    "omega" + std::to_string(omega) + ".txt";
@@ -59,7 +60,7 @@ int main (int argc, char **argv)
                    "rhoN" + std::to_string((uint) rhoN) + \
                    "omega" + std::to_string(omega) + ".txt";
 
-        jeigval = ho.two_electrons(&Ev, omegas[0], true);
+        jeigval = ho.two_electrons(&Ev, omega, true);
         jmin = jeigval.index_min();
 
         eigvaluefile.open(eiglname);

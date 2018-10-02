@@ -55,7 +55,7 @@ arma::vec Harmonic_oscillator::two_electrons(arma::mat *Ev, double omega,
     arma::vec jeigval(N-1);
     arma::vec dvar = omega * this->Vi;
 
-    if (inter) {
+    if (inter == true) {
         dvar = dvar + 1 / this->rho;
     }
 
