@@ -1,0 +1,90 @@
+\documentclass[a4paper, fontsize=11pt]{article}
+
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[english]{babel} % English language/hyphenation
+%\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{graphicx}
+
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,
+citecolor=blue]{hyperref}
+
+%\bibliographystyle{ieeetr}
+\bibliographystyle{apalike}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\begin{document}
+
+\title{Project 2 FYS4150 \\ Eigenvalue problems}
+\author{Audun Tahina Reitan and Marius Holm}
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\maketitle
+
+
+\section{Abstract}
+
+
+
+\section{Introduction}
+In this project we'll develop code for solving eigenvalue problems. Our eigenvalue solver will be based on Jacobi's method, while the matrix we need to diagonalize is the tridiagonal Toeplitz matrix. This matrix has analytical eigenvalues and eigenvectors, which makes it easier for us to test our algorithms. 
+
+
+\paragraph{}
+The first problem we'll look at is the two-point boundary value problem of a buckling beam or a spring fastened at both ends. This problem has analytical solutions, and by adding a new variable along the diagonal we can study quantum mechanical problems. From quantum mechanics we will study the harmonic oscillator problem, with one or two electrons. For the two electron problem we can study the effects of Coulomb interaction and extract some interesting physics results.  The two electron problem even has analytical solutions for selected frequencies.\cite{PhysRevA.48.3561}
+
+\paragraph{}
+We introduce the relevant methods along with a brief explanation of our implementation.\cite{Jensen}
+
+
+Structure of report
+
+
+\section{Methods}
+
+
+\subsection{Jacobi's method}
+
+\subsection{Scaling equations}
+
+\subsection{Implementation}
+
+All our code, benchmark calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%202}{Auduns GitHub}.
+
+\section{Results}
+
+
+\section{Discussion}
+
+
+\section{Appendix A}
+
+\newpage
+
+\bibliography{references}
+\end{document}
