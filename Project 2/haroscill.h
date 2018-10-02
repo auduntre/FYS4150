@@ -19,14 +19,14 @@ class Harmonic_oscillator
 
         arma::vec rho;
         arma::vec Vi;
-
+        
     public:
         Harmonic_oscillator(double rhoN, uint N);
 
         arma::vec one_electron ();
-        void two_electrons ();
+        arma::vec two_electrons (arma::mat *Ev, double omega);
 
-        arma::vec analy_eigval ();
+        arma::vec analy_eigval_one_election();
 };
 
 #endif

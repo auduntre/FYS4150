@@ -2,11 +2,14 @@
 #include "jacobi.h"
 #include "toeplitz.h"
 
+#include <iostream>
+
 Harmonic_oscillator::Harmonic_oscillator(double rhoN, uint N)
 {
+    this->N = N;
     this->rhoN = rhoN;
+    
     this->h = rhoN / N;
-
     this->dconst = 2.0 / (this->h * this->h);
     this->econst = -1.0 / (this->h * this->h);
 
@@ -20,8 +23,8 @@ Harmonic_oscillator::Harmonic_oscillator(double rhoN, uint N)
 arma::vec Harmonic_oscillator::one_electron()
 {
     uint N = this->N;
-
-    arma::vec eigval = this->analy_eigval();
+    
+    arma::vec eigval = this->analy_eigval_one_election();
     arma::vec jeigval(N-1);
     arma::vec tmp(4);
 
@@ -41,14 +44,27 @@ arma::vec Harmonic_oscillator::one_electron()
     return tmp;
 }
 
-void Harmonic_oscillator::two_electrons()
+
+arma::vec Harmonic_oscillator::two_electrons(arma::mat *Ev, double omega)
 {
-    return;
+    uint N = this->N;
+
+    arma::mat A(N-1, N-1);
+
+    arma::vec jeigval(N-1);
+    arma::vec dvar = omega * this->Vi + 1 / this->rho;
+
+    Tridiag td(this->econst, this->dconst, N-1);
+    td.set_variable_diags(dvar);
+
+    A = td.get_matrix();
+    jeigval = jacobi(A, Ev, eps);
+
+    return jeigval;
 }
 
 
-arma::vec Harmonic_oscillator::analy_eigval()
+arma::vec Harmonic_oscillator::analy_eigval_one_election()
 {
-    uint N = this->N;
-    return arma::linspace<arma::vec>(3.0, 3.0 + 4.0*(N - 2), N - 1);
+    return arma::linspace<arma::vec>(3.0, 3.0 + 4.0*(this->N-2), this->N-1);
 }

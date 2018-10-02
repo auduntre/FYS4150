@@ -13,21 +13,27 @@ int main (int argc, char **argv)
     arma::vec one_electron (uint N, double rhoN);
     void two_electrons (uint N, double rhoN);
 
+    double omegas[4] = {0.01, 0.50, 1.00, 5.00};
+
     uint N = 100;
+
+    // Value thats spits out good approx to analytical eigenvalues
     double rhoN = 5.00;
-    
-    arma::vec tmp;
-    std::string tmpname;
 
     if (argc > 1) {
         N = std::atoi(argv[1]);
     }
 
-    // Value thats spits out good approx to analytical eigenvalues
-    
     if (argc > 2) {
         rhoN = std::atof(argv[2]);
     }
+    
+    arma::mat Ev(N-1, N-1, arma::fill::eye);
+    arma::vec jeigval(N-1);
+    arma::vec tmp;
+    
+    std::string tmpname;
+
 
     Harmonic_oscillator ho = Harmonic_oscillator(rhoN, N);
 
@@ -35,8 +41,14 @@ int main (int argc, char **argv)
               "rhoN" + std::to_string((uint) rhoN) + ".txt";
 
 
-    // = ho.one_electron();
+    tmp = ho.one_electron();
     tmp.save(tmpname, arma::raw_ascii);
+
+    for (double omega: omegas) {
+        jeigval = ho.two_electrons(&Ev, omegas[0]);
+
+        jeigval.print();
+    }
 
     return 0;
 }
