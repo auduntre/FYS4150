@@ -168,22 +168,63 @@ c = \frac{1}{\sqrt{1+ t^2}}
 \end{equation}
 
 \begin{equation}
-s = tc
+s = t\,c
 \end{equation}
 
-For $t$ we choose the solution to the 2nd degree formula that returns the smallest answear so that $t$ doesn't creep up to very high values. Because we run the risk of loss of significance because of cancellation in the equation for $t$ when $\tau$ becomes so big that $\tau \approx \sqrt{1 + \tau^2}$.
+For $t$ we choose the solution to the 2nd degree formula that returns the smallest answer so that $t$ does not reach very high values. We do this because of the risk for loss of significance because of cancellation in the equation for $t$ when $\tau$ becomes so big that $\sqrt{1 + \tau^2} \approx \tau $.
 
 \begin{equation}
-t = \frac{1}{\tau + \sqrt{1 + \tau^2}}, \tau > 0.0
+t = \frac{1}{\tau + \sqrt{1 + \tau^2}}, \quad \tau > 0.0
 \end{equation}
 
 \begin{equation}
-t = \frac{-1}{-\tau + \sqrt{1 + \tau^2}}, \tau \leq 0.0
+t = \frac{-1}{-\tau + \sqrt{1 + \tau^2}}, \quad \tau \leq 0.0
 \end{equation}
 
 These two solutions are equivalent to the smallest solution of the 2nd degree equation, and are numerical stable.
 
 \paragraph{Quantum mechanics}
+We are also interested in quantum mechanical problems where we want to solve the radial part of Schr\"{o}dinger's equation for one electron in a harmonic oscillator potential. The equation is given as:
+
+\begin{equation}
+-\dfrac{\hbar^2}{2m}\Big(\dfrac{1}{r^2} \dfrac{d}{dr} r^2 \dfrac{d}{dr} - \dfrac{l(l+1)}{r^2} \Big) R(r) +V(r)R(r)=E \, R(r)
+\end{equation}
+
+$V(r)$ for a harmonic oscillator potential is given as $V(r)=\frac{1}{2}kr^2$ with \\$k=m \omega^2$ and where $E$ is the energy of the harmonic oscillator in three dimensions. $\omega$ is the oscillator frequency, and the energies are given as:
+
+\begin{equation}
+E_{nl} = \hbar \omega \Big(2n+l+\frac{3}{2} \Big), \: \text{with} \: n=0,1,2, \hdots \: \text{and} \: l=0,1,2,\hdots
+\end{equation}
+
+Since we have made the transformation into spherical coordinates we have $r \in [0, \infty)$, and the quantum number $l$ is the orbital momentum of the electron. We then substitute $R(r)=\dfrac{1}{r}u(r)$ and get
+
+\begin{equation}
+\dfrac{\hbar^2}{2m} \dfrac{d^2}{dr^2} u(r) + \Big(V(r) + \dfrac{l(l+1)}{r^2} \dfrac{\hbar^2}{2m}\Big) u(r) = E \, u(r)
+\end{equation}
+
+With boundary conditions $u(0)=0$ and $u(\infty)=0$. We introduce the dimensionless variable $\rho = (1/\alpha)r$ where $\alpha$ is a constant with dimension length. We set $l=0$, and insert $V(\rho)=(1/2)k\alpha^2 \rho^2$. This gives us the following equation
+
+\begin{equation}
+-\dfrac{\hbar^2}{2m\alpha^2} \dfrac{d^2}{d\rho^2} \, u(\rho) + \dfrac{k}{2} \alpha^2 \rho^2 \, u(\rho) = E \, u(\rho) \quad |\cdot \dfrac{2m\alpha^2}{\hbar^2}
+\end{equation}
+
+\begin{equation}
+-\dfrac{d^2}{d\rho^2} \, u(\rho) + \dfrac{mk}{\hbar^2} \alpha^4 \rho^2 \, u(\rho) = \dfrac{2m\alpha^2}{\hbar^2} E \, u(\rho) 
+\end{equation}
+
+Fixing the constant $\alpha$ as 
+
+\begin{equation}
+\alpha=\Big(\dfrac{\hbar^2}{mk}\Big)^{\frac{1}{4}}
+\end{equation} 
+
+We also define $\lambda=\dfrac{2m\alpha^2}{\hbar^2}E$ which lets us write the Schr\"{o}dinger equation as
+
+\begin{equation}
+-\dfrac{d^2}{d\rho^2}u(\rho) + \rho^2 \, u(\rho) = \lambda \, u(\rho)
+\end{equation}
+
+
 
 
 \subsection{Implementation}
