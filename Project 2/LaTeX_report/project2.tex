@@ -151,7 +151,9 @@ We can choose the angle $\theta$ as we wish, while making sure that all the non-
 
 
 \subsection{Scaling equations}
+\paragraph{Toeplitz matrix}
 
+\paragraph{Quantum mechanics}
 
 
 \subsection{Implementation}
@@ -187,10 +189,11 @@ The transformation is given by
 As the transformation matrix \textbf{U} is orthogonal we have $\textbf{U}^{T}\textbf{U} = \textbf{I}$.
 
 \begin{align*}
-\textbf{w}_{i} \cdot \textbf{w}_{j} & =\textbf{U} \textbf{v}_{j} \cdot \textbf{U} \textbf{v}_{j} = (\textbf{U}\textbf{v}_{i})^{T}(\textbf{U}\textbf{v}_{j})=(\textbf{U}^{T} \textbf{v}_{i}^{T})(\textbf{U}\textbf{v}_{j})\\
-&= \textbf{v}_{i}^{T} (\textbf{U}^{T} \textbf{U}) \textbf{v}_{j}= \textbf{v}_{i}^{T} \, \textbf{I} \, \textbf{v}_{j} =  \textbf{v}_{i}^{T} \,  \textbf{v}_{j} = \textbf{v}_{i} \cdot \textbf{v}_{j}
+\textbf{w}_{i} \cdot \textbf{w}_{j} & =\textbf{U} \textbf{v}_{i} \cdot \textbf{U} \textbf{v}_{j} = (\textbf{U}\textbf{v}_{i})^{T}(\textbf{U}\textbf{v}_{j})=(\textbf{U}^{T} \textbf{v}_{i}^{T})(\textbf{U}\textbf{v}_{j})\\
+&= \textbf{v}_{i}^{T} (\textbf{U}^{T} \textbf{U}) \textbf{v}_{j}= \textbf{v}_{i}^{T} \, \textbf{I} \, \textbf{v}_{j} =  \textbf{v}_{i}^{T} \,  \textbf{v}_{j} = \textbf{v}_{i} \cdot \textbf{v}_{j} = \textbf{v}^T_{i} \textbf{v}_{j}
 \end{align*}
 
+As $\textbf{w}_{i} \cdot \textbf{w}_{j} = \textbf{v}_{i} \cdot \textbf{v}_{j}$ the dot product is preserved. The same applies for $\textbf{v}_{i} \cdot \textbf{v}_{j} = \textbf{v}^T_{i} \textbf{v}_{j}$ which implies that orthogonality is also preserved.
 
 
 
