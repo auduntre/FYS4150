@@ -5,6 +5,7 @@
 
 typedef unsigned uint;
 
+
 /*
  * Class for setting up an tridiagonal Toeplitz' matrix (or one
  * with a variable diagonal) with the same value over and under 
