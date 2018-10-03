@@ -254,7 +254,9 @@ Finally we have defined $\lambda$ as
 
 \subsection{Implementation}
 
-All our code, benchmark calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%202}{Auduns GitHub}.
+For the Jacobi's rotation method we implemented the algorithm given on page 217 in \cite{Jensen} and using the scaling and rewriting we have done the transformation matrix. In the github repo cited below this would be found in the \verb+jacobi.cpp+ file. For finding the max off-diagonal element we took the upper triangular part of the matrix given, removed the diagonal, and then used Armadillos own methods to find the maximum absolute value element.
+
+All our code, calculations, unittests, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%202}{Auduns GitHub}.
 
 \section{Results}
 \subsection{Preservation of dot product}
@@ -307,15 +309,11 @@ $|\lambda_4 - \hat{\lambda}_4|$    &    $2.08$&    $2.83\mathrm{E}{-1}$&    $6.5
 \end{tabular}
 \end{center}
 
-\subsection{Eigenvalues}
-
-Include results of $\text{error}=\lambda_{\text{real}} - \lambda_{\text{model}}$
-
 \section{Discussion}
 \subsection{Jacobi method}
 The Jacobi method is generally a slower algorithm than those based tridiagonalization. However the Jacobi method is easy to parallelize which can improve performance significantly. The main reason for the Jacobi methods slow convergence is that for each new rotation, matrix elements which were zero might change to non-zero values.
 
-For the case with one electron we se that we would have to set $N > 200$ for getting numerical eigenvalues, $\hat{\lambda}_i$ that are able to reproduce the analytical ones, $\lambda_i$ for the frist four. The Jacobi method is far to slow to be usable abow this 
+For the case with one electron we se that we would have to set $N > 200$ for getting numerical eigenvalues, $\hat{\lambda}_i$ that are able to reproduce the analytical ones, $\lambda_i$ for the frist four significant digits (which means an absolute error $< 10^{-4}$). The Jacobi method is far too slow to be usable abow this value of integration points.
 
 
 \bibliography{references}
