@@ -31,6 +31,8 @@ int main(int argc, char **argv)
 
     uint Ns[3]= {10, 50, 100};
 
+    // Checking wheter the system gives correct eigenvalues for 
+    // diffirent Ns.
     for (uint N: Ns) {
         std::cout << "--------------------" << std::endl;
         std::cout << "N = " << N << std::endl;
@@ -67,7 +69,9 @@ void set_values(double *h, double *a, double *d, double *deps,
 
 
 bool obtained_analy(arma::vec val, arma::vec lambda, std::string method_name,
-                    double deps) {
+                    double deps)
+{
+    // Are eigenvalues close enough to the analytical ones
     if (arma::approx_equal(val, lambda, "absdiff", deps)) {
         std::cout << method_name << " obtained approximately "
                   << "analytical eigenvalues with eps = " 
@@ -82,6 +86,7 @@ bool obtained_analy(arma::vec val, arma::vec lambda, std::string method_name,
 
 arma::vec analy_eigval(double a, double d, uint N)
 {
+    // Analytical eigenvalues
     arma::vec js = arma::linspace<arma::vec>(1, N-1, N-1);
     arma::vec lambda(N-1);
 

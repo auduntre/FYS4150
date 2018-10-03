@@ -41,6 +41,7 @@ int main (int argc, char **argv)
     std::string eigcname; // eigenvector
     std::ofstream eigvaluefile;
 
+    // For one electron how close is the eigenvalues for diffirent Ns
     for (uint n: ns) {
         Harmonic_oscillator hon = Harmonic_oscillator(rhoN, n);
 
@@ -53,6 +54,7 @@ int main (int argc, char **argv)
 
     Harmonic_oscillator ho = Harmonic_oscillator(rhoN, N);
 
+    // Run two electron case for diffirent omega values
     for (double omega: omegas) {
         Ev.eye();
 
@@ -77,6 +79,7 @@ int main (int argc, char **argv)
 
     Ev.eye();
 
+    // Run case with non-interacting system 
     jeigval = ho.two_electrons(&Ev, omegas[0], false);
     jmin = jeigval.index_min();
 

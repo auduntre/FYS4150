@@ -16,13 +16,15 @@ arma::vec jacobi (arma::mat A, arma::mat *Ev, double eps)
     uint iter = 0;
 
     maxval = maxoffdiag(A, &maxi, &maxj);
-
+    
+    // The jacobi's rotation algorithm
     while (maxval > eps && maxiter > iter) {
         A = rotate(A, Ev, maxi, maxj);
         maxval = maxoffdiag(A, &maxi, &maxj);
         iter++;
     }
 
+    // Give number of iterations and wheter sucsess
     if (iter >= maxiter) {
         std::cout << "Did not converge to max offdiagnonal element <= " << eps
                   << " for " << maxiter << " iterations." << std::endl;
@@ -61,6 +63,7 @@ arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l)
     indices.shed_row(k);
     indices.shed_row(l - 1);
 
+    // Rotational elements
     if (akl != 0.0 ) {   
         tau = (all - akk) / (2 * akl);
         
@@ -77,6 +80,7 @@ arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l)
         sinw = 0.0;
     }
 
+    // Values on the diagonal
     B(k,k) = cosw * cosw * akk - 2.0 * cosw * sinw * akl + sinw * sinw * all;
     B(l,l) = sinw * sinw * akk + 2.0 * cosw * sinw * akl + cosw * cosw * all;
     
@@ -84,6 +88,7 @@ arma::mat rotate (arma::mat B, arma::mat *Ev, uint k, uint l)
     B(k,l) = 0.0;
     B(l,k) = 0.0;
     
+    // Values of rows and columns k and l
     for (uint i: indices) {
         B(i,k) = cosw * aik(i) - sinw * ail(i);
         B(i,l) = cosw * ail(i) + sinw * aik(i);
