@@ -51,7 +51,10 @@ citecolor=blue]{hyperref}
 
 
 \section{Abstract}
+We give a brief introduction to eigenvalue problems and how the Jacobi method can be used to solve such problems. We also give a brief discussion on scaling equations, and numerical stability for a relevant equation.
 
+\paragraph{}
+We then show that the dot product and orthogonality is preserved for an orthogonal transformation. We then present a small selection of results and two plots of relevance. More of our results can be found in the GitHub repository linked in the implementation section. 
 
 
 \section{Introduction}
@@ -280,7 +283,7 @@ As the transformation matrix \textbf{U} is orthogonal we have $\textbf{U}^{T}\te
 &= \textbf{v}_{i}^{T} (\textbf{U}^{T} \textbf{U}) \textbf{v}_{j}= \textbf{v}_{i}^{T} \, \textbf{I} \, \textbf{v}_{j} =  \textbf{v}_{i}^{T} \,  \textbf{v}_{j} = \textbf{v}_{i} \cdot \textbf{v}_{j} = \textbf{v}^T_{i} \textbf{v}_{j}
 \end{align*}
 
-As $\textbf{w}_{i} \cdot \textbf{w}_{j} = \textbf{v}_{i} \cdot \textbf{v}_{j}$ the dot product is preserved. The same applies for $\textbf{v}_{i} \cdot \textbf{v}_{j} = \textbf{v}^T_{i} \textbf{v}_{j} = \delta_{ij}$ which implies that orthogonality is also preserved. This means that the Jacobi's rotational method which multiple orthogonal transfromations preserves the orthogonality and dot product of the columns in the system we trasnform.
+As $\textbf{w}_{i} \cdot \textbf{w}_{j} = \textbf{v}_{i} \cdot \textbf{v}_{j}$ the dot product is preserved. The same applies for $\textbf{v}_{i} \cdot \textbf{v}_{j} = \textbf{v}^T_{i} \textbf{v}_{j} = \delta_{ij}$ which implies that orthogonality is also preserved. This means that the Jacobi's rotational method which multiple orthogonal transfromations preserves the orthogonality and dot product of the columns in the system we transform.
 
 \subsection{Eigenvalues of one electron in the harmonic oscillator}
 
