@@ -8,6 +8,7 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{float}
 
 
 \usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,
@@ -69,20 +70,6 @@ Structure of report
 
 \section{Methods}
 
-\subsection{Jacobi's method}
-Jacobi's method is a simple method for solving linear algebra problems of the sort
-
-\begin{equation}
-\hat{A} \textbf{x} = \textbf{b}
-\end{equation}
-
-where $\hat{A}$ is a matrix and \textbf{x} and \textbf{b} are vectors. The Jacobi method is an iterative scheme where we make a guess for the unknown, \textbf{x}, and after $k+1$ iterations we have
-
-\begin{equation}
-\textbf{x}^{(k+1)}=\hat{D}^{-1}(\textbf{b} - (\hat{L} + \hat{U}) \textbf{x}^{(k)})
-\end{equation} 
-
-where we have defined $\hat{A} = \hat{D} + \hat{U} + \hat{L}$. $\hat{D}$ is the diagonal matrix, $\hat{U}$ is an upper triangular matrix, and $\hat{L}$ is a lower triangular matrix.\cite{Jensen} 
 
 \subsection{Eigenvalue problems}
 Given the eigenvalue problem 
@@ -254,9 +241,11 @@ Finally we have defined $\lambda$ as
 
 \subsection{Implementation}
 
-For the Jacobi's rotation method we implemented the algorithm given on page 217 in \cite{Jensen} and using the scaling and rewriting we have done the transformation matrix. In the github repo cited below this would be found in the \verb+jacobi.cpp+ file. For finding the max off-diagonal element we took the upper triangular part of the matrix given, removed the diagonal, and then used Armadillos own methods to find the maximum absolute value element. Elsewise check github repo for implementation explaination.
+For the Jacobi's rotation method we implemented the algorithm given on page 217 in \cite{Jensen} and using the scaling and rewriting we have done the transformation matrix. In the github repository cited below the program can be found in the \verb+jacobi.cpp+ file. In order to find the highest valued off-diagonal element we took the upper triangular part of the matrix given, removed the diagonal, and then used Armadillos own methods to find the maximum absolute value element. For further details regarding implementation, see comments in the different programs.
 
-All our code, calculations, unittests, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%202}{Auduns GitHub}.
+
+\paragraph{}
+All our code, calculations, unittests, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%202}{Auduns GitHub repository}.
 
 \section{Results}
 \subsection{Preservation of dot product}
@@ -295,8 +284,9 @@ As $\textbf{w}_{i} \cdot \textbf{w}_{j} = \textbf{v}_{i} \cdot \textbf{v}_{j}$ t
 
 \subsection{Eigenvalues of one electron in the harmonic oscillator}
 
-Using one electron in the harmonic oscillator and solving using the Jacobi's method we get the following result on the apporixmation of the analytical eigenvalues $\lambda = 3, 7, 11, 15$ for the systemm, varying the integration points $N$:
+Using one electron in the harmonic oscillator and solving using the Jacobi's method we get the following result on the apporixmation of the analytical eigenvalues $\lambda = 3, 7, 11, 15$ for the system, varying the number of integration points $N$:
 
+\begin{table}[htp]
 \begin{center}
 \begin{tabular}{@{}llllllll@{}}
 \toprule
@@ -307,13 +297,39 @@ $|\lambda_2 - \hat{\lambda}_2|$    &    $4.16\mathrm{E}{-2}$&    $6.30\mathrm{E}
 $|\lambda_3 - \hat{\lambda}_3|$    &    $1.06$&    $1.54\mathrm{E}{-1}$&    $3.81\mathrm{E}{-2}$&    $1.68\mathrm{E}{-2}$&     $9.34\mathrm{E}{-3}$&     $4.04\mathrm{E}{-3}$&     $2.18\mathrm{E}{-3}$\\
 $|\lambda_4 - \hat{\lambda}_4|$    &    $2.08$&    $2.83\mathrm{E}{-1}$&    $6.54\mathrm{E}{-2}$&    $2.57\mathrm{E}{-2}$&     $1.18\mathrm{E}{-2}$&     $2.02\mathrm{E}{-3}$&     $1.42\mathrm{E}{-3}$\\ \bottomrule
 \end{tabular}
+\caption{Absolute error between the analytically known eigenvalues of the one-electron energies and our numerically calculated eigenvalues.}
 \end{center}
+\end{table}
+
+
+\subsection{Quantum dots, plots}
+
+
+\begin{figure}[H]
+\includegraphics[scale=0.8]{interaction.png}
+\caption{Comparing the energy levels for a system with and without Coulomb interation with $\omega_{r}=0.01$.}
+\label{Coulomb}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[scale=0.8]{twoelectrons.png}
+\caption{Probability distribution for the ground state of a two-electron system including Coulomb interaction. Plotted for different values of $\omega_{r}$, where $\omega_{r}$ is a parameter which reflects the strength of the oscillator potential.}
+\label{two-electron}
+\end{figure}
+
+
 
 \section{Discussion}
 \subsection{Jacobi method}
 The Jacobi method is generally a slower algorithm than those based tridiagonalization. However the Jacobi method is easy to parallelize which can improve performance significantly. The main reason for the Jacobi methods slow convergence is that for each new rotation, matrix elements which were zero might change to non-zero values.
 
-For the case with one electron we se that we would have to set $N > 200$ for getting numerical eigenvalues, $\hat{\lambda}_i$ that are able to reproduce the analytical ones, $\lambda_i$ for the frist four significant digits (which means an absolute error $< 10^{-4}$). The Jacobi method is far too slow to be usable abow this value of integration points.
+
+\paragraph{}
+For the case with one electron we would have needed to choose $N > 200$ in order to get numerical eigenvalues, $\hat{\lambda}_i$ that are able to reproduce the analytical ones, $\lambda_i$ with four leading digits after the decimal point (which means an absolute error $< 10^{-4}$). The Jacobi method is very slow for too large $N$ values, and doing the calculations with an $N > 200$ a modern laptop takes several minutes to complete the calculations. 
+
+\paragraph{}
+It would be of interest to investigate more effective methods like the Householder's method for large values of $N$, and see what differences a significant increase in integration points would result in.
 
 
 \bibliography{references}
