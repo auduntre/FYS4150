@@ -10,8 +10,8 @@ class CelestialBody
 {
     public:
         vec3 position;
-        vec3 velocity(3);
-        vec3 force(3);
+        vec3 velocity;
+        vec3 force;
         double mass;
 
         CelestialBody (vec3 position, vec3 velocity, double mass);
