@@ -4,10 +4,11 @@
 class Euler
 {
     private:
-        double dt;
+        double dt; // == delta_t == dt
 
     public:
-        Euler (double dt);
+        Euler (double delta_t);
+        
         void integrateOneStep(class SolarSystem &system);
 };
 

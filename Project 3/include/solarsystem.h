@@ -11,12 +11,12 @@
 class SolarSystem
 {
     private:
-        std::vector<CelestialBody> m_bodies;
-        std::ofstream m_file;
+        std::vector<CelestialBody> bods;
+        std::ofstream ofile;
         
-        vec3 m_angularMomentum;
-        double m_kineticEnergy;
-        double m_potentialEnergy;
+        vec3 angMom;
+        double ke;
+        double pe;
 
     public:
         SolarSystem();

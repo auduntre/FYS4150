@@ -14,7 +14,7 @@ class CelestialBody
         vec3 force;
         double mass;
 
-        CelestialBody (vec3 position, vec3 velocity, double mass);
+        CelestialBody (vec3 pos, vec3 vel, double m);
         CelestialBody (double x, double y, double z, double vx, double vy,
                        double vz, double mass);
         

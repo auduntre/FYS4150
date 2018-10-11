@@ -1,0 +1,23 @@
+#include "celestialbody.h"
+
+CelestialBody::CelestialBody (vec3 pos, vec3 vel, double m) :
+    position(pos),
+    velocity(vel),
+    mass(m)
+{
+}
+
+
+CelestialBody::CelestialBody (double x, double y, double z, double vx,
+                              double vy, double vz, double m) : 
+    mass(m)
+{
+    this->position = {x, y, z};
+    this->velocity = {vx, vy, vz};
+}
+
+
+void CelestialBody::resetForce ()
+{
+    this->force = {0, 0, 0};
+}
