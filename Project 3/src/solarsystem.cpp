@@ -8,7 +8,8 @@ SolarSystem::SolarSystem () :
 }
 
 
-CelestialBody &SolarSystem::createCelestialBody (vec3 position, vec3 velocity,
+CelestialBody &SolarSystem::createCelestialBody (arma::vec3 position, 
+                                                 arma::vec3 velocity,
                                                  double mass)
 {
     this->bods.push_back(CelestialBody(position, velocity, mass));
@@ -30,10 +31,10 @@ void SolarSystem::calculateForcesAndEnergy ()
     for (int i = 0; i < this->numberOfBodies(); i++) {
         CelestialBody &body1 = this->bods[i];
 
-        for (int j = i+1; j < this->numberOfBodies; j++) {
+        for (int j = i+1; j < this->numberOfBodies(); j++) {
             CelestialBody &body2 = this->bods[j];
-            vec3 deltaRVector = body1.position - body2.position;
-            vec3 normRVector = arma::normalise(deltaRVector);
+            arma::vec3 deltaRVector = body1.position - body2.position;
+            arma::vec3 normRVector = arma::normalise(deltaRVector);
 
             // Euclidean distance is the L2-norm
             double dr = arma::norm(deltaRVector, 2);
@@ -48,6 +49,7 @@ void SolarSystem::calculateForcesAndEnergy ()
 
         this->ke += 0.5 * body1.mass 
                   * arma::dot(body1.velocity, body1.velocity);
+    }
 }
 
 
@@ -75,7 +77,7 @@ double SolarSystem::kineticEnergy () const
 }
 
 
-void SolarSystem::writeToFile (string filename)
+void SolarSystem::writeToFile (std::string filename)
 {
     if (!this->ofile.good()) {
         this->ofile.open(filename.c_str(), std::ofstream::out);
@@ -85,17 +87,19 @@ void SolarSystem::writeToFile (string filename)
             std::terminate();
         } 
 
-        this->ofile << this->numberOfBodies << std::endl;
-        this->ofile << "Comment line that needs to be here." << this->endl;
-        for(CelestialBody &body : m_bodies) {
+        this->ofile << this->numberOfBodies() << std::endl;
+        this->ofile << "Comment line that needs to be here." << std::endl;
+
+        for(CelestialBody &body : this->bods) {
             this->ofile << "1 " << body.position(0) << " " 
                         << body.position(1) << " " 
                         << body.position(2) << "\n";
         }
+    }
 }
 
 
-vec3 SolarSystem::angularMomentum () const
+arma::vec3 SolarSystem::angularMomentum () const
 {
     return this->angMom;
 }

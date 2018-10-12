@@ -17,14 +17,14 @@ class SolarSystem
         std::vector<CelestialBody> bods;
         std::ofstream ofile;
         
-        vec3 angMom;
+        arma::vec3 angMom;
         double ke;  // Kinetic Energy
         double pe;  // Potential Energy
 
     public:
         SolarSystem();
 
-        CelestialBody &createCelestialBody (vec3 position, vec3 velocity,
+        CelestialBody &createCelestialBody (arma::vec3 position, arma::vec3 velocity,
                                             double mass);
         
         void calculateForcesAndEnergy ();
@@ -36,7 +36,7 @@ class SolarSystem
         
         void writeToFile (std::string filename);
         
-        arma::vec angularMomentum () const;
+        arma::vec3 angularMomentum () const;
         std::vector<CelestialBody> &bodies ();
 };
 

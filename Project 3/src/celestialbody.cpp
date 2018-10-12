@@ -1,6 +1,6 @@
 #include "celestialbody.h"
 
-CelestialBody::CelestialBody (vec3 pos, vec3 vel, double m) :
+CelestialBody::CelestialBody (arma::vec3 pos, arma::vec3 vel, double m) :
     position(pos),
     velocity(vel),
     mass(m)
