@@ -1,17 +1,17 @@
 #include "solarsystem.h"
 #include <iostream>
 
-SolarSystem::SolarSytem() : 
+SolarSystem::SolarSystem () : 
     ke(0),
     pe(0)
 {
 }
 
 
-CelestialBody &SolarSystem::createCelestialBody(vec3 position, vec3 velocity,
-                                                double mass)
+CelestialBody &SolarSystem::createCelestialBody (vec3 position, vec3 velocity,
+                                                 double mass)
 {
-    this->bods.push_back(CelestialBody(poistion, velocity, mass));
+    this->bods.push_back(CelestialBody(position, velocity, mass));
     return this->bods.back();
 }
 
@@ -33,13 +33,75 @@ void SolarSystem::calculateForcesAndEnergy ()
         for (int j = i+1; j < this->numberOfBodies; j++) {
             CelestialBody &body2 = this->bods[j];
             vec3 deltaRVector = body1.position - body2.position;
-            
+            vec3 normRVector = arma::normalise(deltaRVector);
+
             // Euclidean distance is the L2-norm
             double dr = arma::norm(deltaRVector, 2);
             
-            // Calculate the force and potential energy here
+            // Calculate potential energy
+            double U = - GravConst * body1.mass * body2.mass / dr;
+            this->pe += U;
+
+            // Calculate the force
+            body1.force += (U / dr) * normRVector;
         }
 
         this->ke += 0.5 * body1.mass 
                   * arma::dot(body1.velocity, body1.velocity);
+}
+
+
+int SolarSystem::numberOfBodies () const
+{
+    return this->bods.size();
+}
+
+
+double SolarSystem::totalEnergy () const
+{
+    return this->ke + this->pe;
+}
+
+
+double SolarSystem::potentialEnergy () const
+{
+    return this->pe;
+}
+
+
+double SolarSystem::kineticEnergy () const
+{
+    return this->ke;
+}
+
+
+void SolarSystem::writeToFile (string filename)
+{
+    if (!this->ofile.good()) {
+        this->ofile.open(filename.c_str(), std::ofstream::out);
+        
+        if(!this->ofile.good()) {
+            std::cout << "Error opening file " << filename << ". Aborting!" << std::endl;
+            std::terminate();
+        } 
+
+        this->ofile << this->numberOfBodies << std::endl;
+        this->ofile << "Comment line that needs to be here." << this->endl;
+        for(CelestialBody &body : m_bodies) {
+            this->ofile << "1 " << body.position(0) << " " 
+                        << body.position(1) << " " 
+                        << body.position(2) << "\n";
+        }
+}
+
+
+vec3 SolarSystem::angularMomentum () const
+{
+    return this->angMom;
+}
+
+
+std::vector<CelestialBody> &SolarSystem::bodies ()
+{
+    return this->bods;
 }
