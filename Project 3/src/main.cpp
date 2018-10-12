@@ -55,8 +55,6 @@ void bodyPrint (std::vector<CelestialBody> &bodies)
     for(int i = 0; i < bodies.size(); i++) {
         CelestialBody &body = bodies[i];
 
-        
-
         std::cout << "--------------------------------" 
                   << "--------------------------------" << std::endl;
 
