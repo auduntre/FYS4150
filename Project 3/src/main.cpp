@@ -44,7 +44,7 @@ int main (int argc, char **argv)
 
     bodyPrint(bodies);
     
-    sol.writeToFile("positions.xyz");
+    sol.writeToFile("../positions/positions.xyz");
 
     return 0;
 }
