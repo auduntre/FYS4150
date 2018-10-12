@@ -7,7 +7,6 @@
 #include "verlet.h"
 
 
-
 int main (int argc, char **argv)
 {
     void bodyPrint (std::vector<CelestialBody> &bodies);
@@ -38,11 +37,8 @@ int main (int argc, char **argv)
     double endTime = 1.0;
     double dt = endTime / nTimesteps;
 
-    Euler integrator(dt);
-
-    for (double t = 0; t < endTime; t += dt) {
-        integrator.integrateOneStep(sol);
-    }
+    Verlet integrator(dt);
+    integrator.integrateNtimes(sol, nTimesteps);
 
     bodyPrint(bodies);
     

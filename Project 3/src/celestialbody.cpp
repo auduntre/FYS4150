@@ -3,7 +3,8 @@
 CelestialBody::CelestialBody (arma::vec3 pos, arma::vec3 vel, double m) :
     position(pos),
     velocity(vel),
-    mass(m)
+    mass(m),
+    past_position(pos)
 {
 }
 

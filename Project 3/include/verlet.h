@@ -1,15 +1,17 @@
 #ifndef VERLET_H
 #define VERLET_H
 
-class Verlet
+#include "euler.h"
+
+class Verlet : public Euler
 {
-    private:
-        double dt;
 
     public:
         Verlet (double deltaT);
 
         void integrateOneStep(class SolarSystem &system);
+        void initialStep (class SolarSystem &system);
+        void integrateNtimes (class SolarSystem &system, int nTimes);
 };
 
 #endif

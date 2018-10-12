@@ -15,3 +15,17 @@ void Euler::integrateOneStep (SolarSystem &system)
         body.velocity += (body.force / body.mass) * this->dt;
     }
 }
+
+
+void Euler::integrateNtimes(class SolarSystem &system, int nTimes)
+{
+    for (int i = 0; i < nTimes; i++) {
+        this->integrateOneStep(system);
+    }
+}
+
+
+double Euler::h() const
+{
+    return this->dt;
+}

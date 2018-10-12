@@ -9,7 +9,11 @@ class Euler
     public:
         Euler (double deltaT);
         
-        void integrateOneStep(class SolarSystem &system);
+        void integrateOneStep (class SolarSystem &system);
+        void integrateNtimes (class SolarSystem &system, int nTimes);
+
+        // get dt
+        double h() const;
 };
 
 #endif
