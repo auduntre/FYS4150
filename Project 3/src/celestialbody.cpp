@@ -14,6 +14,7 @@ CelestialBody::CelestialBody (double x, double y, double z, double vx,
 {
     this->position = {x, y, z};
     this->velocity = {vx, vy, vz};
+    this->past_position = this->position;
 }
 
 

@@ -4,10 +4,10 @@ CXXFLAGS = -I$(IDIR) -std=c++11 -larmadillo
 
 ODIR = obj
 
-_DEPS = euler.h solarsystem.h celestialbody.h
+_DEPS = euler.h verlet.h solarsystem.h celestialbody.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = euler.o solarsystem.o celestialbody.o main.o
+_OBJ = euler.o verlet.o solarsystem.o celestialbody.o main.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
@@ -21,4 +21,4 @@ solarsystem: $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o
+	rm -f $(ODIR)/*.o *~

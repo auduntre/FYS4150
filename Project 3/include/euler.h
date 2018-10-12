@@ -12,5 +12,4 @@ class Euler
         void integrateOneStep(class SolarSystem &system);
 };
 
-
 #endif

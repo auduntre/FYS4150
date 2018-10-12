@@ -8,6 +8,7 @@
 class CelestialBody
 {
     public:
+        arma::vec3 past_position;
         arma::vec3 position;
         arma::vec3 velocity;
         arma::vec3 force;
