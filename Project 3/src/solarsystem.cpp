@@ -45,6 +45,7 @@ void SolarSystem::calculateForcesAndEnergy ()
 
             // Calculate the force
             body1.force += (U / dr) * normRVector;
+            body2.force -= (U / dr) * normRVector;
         }
 
         this->ke += 0.5 * body1.mass 
@@ -79,22 +80,22 @@ double SolarSystem::kineticEnergy () const
 
 void SolarSystem::writeToFile (std::string filename)
 {
-    if (!this->ofile.good()) {
+    if (this->ofile.good()) {
         this->ofile.open(filename.c_str(), std::ofstream::out);
         
         if(!this->ofile.good()) {
             std::cout << "Error opening file " << filename << ". Aborting!" << std::endl;
             std::terminate();
-        } 
-
-        this->ofile << this->numberOfBodies() << std::endl;
-        this->ofile << "Comment line that needs to be here." << std::endl;
-
-        for(CelestialBody &body : this->bods) {
-            this->ofile << "1 " << body.position(0) << " " 
-                        << body.position(1) << " " 
-                        << body.position(2) << "\n";
         }
+    }
+
+    this->ofile << this->numberOfBodies() << std::endl;
+    this->ofile << "Position of bodies below:" << std::endl;
+
+    for(CelestialBody &body : this->bods) {
+        this->ofile << "1 " << body.position(0) << " " 
+                    << body.position(1) << " " 
+                    << body.position(2) << "\n";
     }
 }
 

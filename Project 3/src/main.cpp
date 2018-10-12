@@ -1,6 +1,6 @@
 #include <iostream>
-#include <cmath>
 #include <cstdlib>
+#include <iomanip> 
 
 #include "solarsystem.h"
 #include "euler.h"
@@ -8,6 +8,8 @@
 
 int main (int argc, char **argv)
 {
+    void bodyPrint (std::vector<CelestialBody> &bodies);
+
     int nTimesteps = 1000;
 
     if (argc >= 2) {
@@ -24,9 +26,42 @@ int main (int argc, char **argv)
 
     pos = {1, 0, 0};
     vel = {0, 2*M_PI, 0};
-    mass  = 3e-6;
+    mass  = 1e-6;
 
     CelestialBody &earth = sol.createCelestialBody(pos, vel, mass);
 
     std::vector<CelestialBody> &bodies = sol.bodies();
+    bodyPrint(bodies);
+
+    double endTime = 1.0;
+    double dt = endTime / nTimesteps;
+
+    Euler integrator(dt);
+
+    for (double t = 0; t < endTime; t += dt) {
+        integrator.integrateOneStep(sol);
+    }
+
+    bodyPrint(bodies);
+    
+    sol.writeToFile("positions.xyz");
+
+    return 0;
+}
+
+
+void bodyPrint (std::vector<CelestialBody> &bodies)
+{
+    for(int i = 0; i < bodies.size(); i++) {
+        CelestialBody &body = bodies[i];
+
+        
+
+        std::cout << "--------------------------------" 
+                  << "--------------------------------" << std::endl;
+
+        std::cout << "The position of this object is: " << body.position.t()
+                  << "The velocity of this object is: " << body.velocity.t()
+                  << std::endl;
+    }
 }

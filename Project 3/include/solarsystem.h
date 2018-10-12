@@ -6,9 +6,10 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cmath>
 
-
-static const double GravConst = 6.67408e-11;
+//static const double GravConst = 6.67408e-11;
+static const double GravConst = 4.0 * M_PI * M_PI; // Scaled
 
 
 class SolarSystem

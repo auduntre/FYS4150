@@ -1,7 +1,7 @@
 #include "euler.h"
 #include "solarsystem.h"
 
-Euler::Euler (double delta_t) : dt(delta_t) 
+Euler::Euler (double deltaT) : dt(deltaT) 
 {
 }
 
