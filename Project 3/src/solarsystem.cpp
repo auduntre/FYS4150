@@ -50,6 +50,9 @@ void SolarSystem::calculateForcesAndEnergy ()
 
         this->ke += 0.5 * body1.mass 
                   * arma::dot(body1.velocity, body1.velocity);
+        
+        this->angMom += arma::cross(body1.position, 
+                                    body1.mass * body1.velocity);
     }
 }
 
