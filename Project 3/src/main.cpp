@@ -34,9 +34,11 @@ int main (int argc, char **argv)
     std::vector<CelestialBody> &bodies = sol.bodies();
     bodyPrint(bodies);
 
+
     double endTime = 1.0;
     double dt = endTime / nTimesteps;
 
+    std::cout << "################# CALCULATE #################" << std::endl;
     Verlet integrator(dt);
     integrator.integrateNtimes(sol, nTimesteps);
 

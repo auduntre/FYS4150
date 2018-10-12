@@ -1,6 +1,6 @@
 IDIR = ../include
 CXX = g++
-CXXFLAGS = -I$(IDIR) -std=c++11 -larmadillo
+CXXFLAGS = -I$(IDIR) -std=c++11 -larmadillo -O3
 
 ODIR = obj
 
