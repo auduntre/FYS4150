@@ -32,17 +32,20 @@ class SolarSystem
         void calculateForcesAndEnergy ();
         void calculateForcesAndPE ();
         void calculateAngMomAndKE ();
-        int numberOfBodies () const;
         
         // Getters
+        int numberOfBodies () const;
         double totalEnergy () const;
         double potentialEnergy () const;
         double kineticEnergy () const;
+        arma::vec3 angularMomentum () const;
+        std::vector<CelestialBody> &bodies ();
+
+        //Setters
+        void setBeta (double b);
         
         void writeToFile (std::string filename);
         
-        arma::vec3 angularMomentum () const;
-        std::vector<CelestialBody> &bodies ();
 };
 
 #endif

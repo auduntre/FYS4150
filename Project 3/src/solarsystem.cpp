@@ -45,14 +45,15 @@ void SolarSystem::calculateForcesAndPE ()
 
             // Euclidean distance is the L2-norm
             double dr = arma::norm(deltaRVector, 2);
-            
+
             // Calculate potential energy
             double U = - GravConst * body1.mass * body2.mass / dr;
             this->pe += U;
 
             // Calculate the force
-            body1.force += (U / dr) * normRVector;
-            body2.force -= (U / dr) * normRVector;
+            double drPow = std::pow(dr, beta - 1.0);
+            body1.force += (U / drPow) * normRVector;
+            body2.force -= (U / drPow) * normRVector;
         }
     }
 }
@@ -101,6 +102,24 @@ double SolarSystem::kineticEnergy () const
 }
 
 
+arma::vec3 SolarSystem::angularMomentum () const
+{
+    return this->angMom;
+}
+
+
+std::vector<CelestialBody> &SolarSystem::bodies ()
+{
+    return this->bods;
+}
+
+
+void SolarSystem::setBeta (double b)
+{
+    this->beta = b;
+}
+
+
 void SolarSystem::writeToFile (std::string filename)
 {
     if (this->ofile.good()) {
@@ -120,16 +139,4 @@ void SolarSystem::writeToFile (std::string filename)
                     << body.position(1) << " " 
                     << body.position(2) << "\n";
     }
-}
-
-
-arma::vec3 SolarSystem::angularMomentum () const
-{
-    return this->angMom;
-}
-
-
-std::vector<CelestialBody> &SolarSystem::bodies ()
-{
-    return this->bods;
 }
