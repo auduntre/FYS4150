@@ -3,7 +3,8 @@
 
 SolarSystem::SolarSystem () : 
     ke(0),
-    pe(0)
+    pe(0),
+    beta(2.0)
 {
 }
 

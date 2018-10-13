@@ -1,6 +1,7 @@
 #ifndef EULER_H
 #define EULER_H
 
+
 class Euler
 {
     private:

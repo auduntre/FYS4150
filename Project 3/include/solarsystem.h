@@ -21,6 +21,7 @@ class SolarSystem
         arma::vec3 angMom;
         double ke;  // Kinetic Energy
         double pe;  // Potential Energy
+        double beta; // force-beta
 
     public:
         SolarSystem();

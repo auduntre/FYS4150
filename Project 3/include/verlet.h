@@ -3,8 +3,11 @@
 
 #include "euler.h"
 
+
 class Verlet : public Euler
 {
+    private:
+        double dtdt;
 
     public:
         Verlet (double deltaT);

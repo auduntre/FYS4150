@@ -1,8 +1,10 @@
 #include "verlet.h"
 #include "solarsystem.h"
 
+
 Verlet::Verlet (double deltaT): Euler(deltaT)
 {
+    this->dtdt = this->h() * this->h(); 
 }
 
 
@@ -12,7 +14,7 @@ void Verlet::integrateOneStep (SolarSystem &system)
 
     for (CelestialBody &body : system.bodies()) {
         arma::vec3 fwrdPos = 2.0 * body.position - body.past_position
-                           + (body.force / body.mass) * this->h() * this->h();
+                           + (body.force / body.mass) * this->dtdt;
 
 
         body.velocity = (fwrdPos - body.past_position) / (2 * this->h());

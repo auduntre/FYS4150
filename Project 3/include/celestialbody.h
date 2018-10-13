@@ -3,7 +3,6 @@
 
 #include <armadillo>
 
-// Fixed vectors in 3 dimensional space
 
 class CelestialBody
 {
