@@ -9,8 +9,11 @@ class Euler
 
     public:
         Euler (double deltaT);
-        
-        void integrateOneStep (class SolarSystem &system);
+       
+        // Polymorphic so that derived classes can change integration method,
+        // but save the structure.
+        virtual void integrateOneStep (class SolarSystem &system);
+        void initialStep (class SolarSystem &system);
         void integrateNtimes (class SolarSystem &system, int nTimes);
 
         // get dt

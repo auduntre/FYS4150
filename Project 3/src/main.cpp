@@ -39,7 +39,7 @@ int main (int argc, char **argv)
     double dt = endTime / nTimesteps;
 
     std::cout << "################# CALCULATE #################" << std::endl;
-    Verlet integrator(dt);
+    Euler integrator(dt);
     integrator.integrateNtimes(sol, nTimesteps);
 
     bodyPrint(bodies);

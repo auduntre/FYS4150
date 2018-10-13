@@ -13,7 +13,6 @@ class Verlet : public Euler
         Verlet (double deltaT);
 
         void integrateOneStep(class SolarSystem &system);
-        void integrateNtimes (class SolarSystem &system, int nTimes);
 };
 
 #endif

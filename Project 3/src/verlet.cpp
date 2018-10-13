@@ -10,27 +10,18 @@ Verlet::Verlet (double deltaT): Euler(deltaT)
 
 void Verlet::integrateOneStep (SolarSystem &system)
 {
-    system.calculateForcesAndEnergy();
-    
     for (CelestialBody &body : system.bodies()) {
         body.position = body.position + body.velocity * this->h()
                       + 0.5 * (body.force / body.mass) * this->dtdt;
     }
     
-    system.calculateForcesAndEnergy();
+    system.calculateForcesAndPE();
 
     for (CelestialBody &body : system.bodies()) {
         body.velocity = body.velocity + 0.5 * this->h()
                       * (body.past_force / body.mass 
                       + body.force / body.mass);
     }
+
+    system.calculateAngMomAndKE();
 }
-
-
-void Verlet::integrateNtimes(class SolarSystem &system, int nTimes)
-{
-    for (int i = 0; i < nTimes; i++) {
-        this->integrateOneStep(system);
-    }
-}
-

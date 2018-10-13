@@ -20,16 +20,21 @@ CelestialBody &SolarSystem::createCelestialBody (arma::vec3 position,
 
 void SolarSystem::calculateForcesAndEnergy ()
 {
-    this->ke = 0;
-    this->pe = 0;
-    this->angMom = {0, 0, 0};
+    this->calculateForcesAndPE();
+    this->calculateAngMomAndKE();
+}
 
+
+void SolarSystem::calculateForcesAndPE ()
+{
+    this->pe = 0;
+    
     // Reset forces on all bodies
     for (CelestialBody &body : this->bods) {
         body.past_force = body.force;
         body.resetForce();
     }
-
+    
     for (int i = 0; i < this->numberOfBodies(); i++) {
         CelestialBody &body1 = this->bods[i];
 
@@ -49,6 +54,17 @@ void SolarSystem::calculateForcesAndEnergy ()
             body1.force += (U / dr) * normRVector;
             body2.force -= (U / dr) * normRVector;
         }
+    }
+}
+
+
+void SolarSystem::calculateAngMomAndKE ()
+{
+    this->ke = 0;
+    this->angMom = {0, 0, 0};
+    
+    for (int i = 0; i < this->numberOfBodies(); i++) {
+        CelestialBody &body1 = this->bods[i];
 
         // Calculate kinetic enerfy
         this->ke += 0.5 * body1.mass 

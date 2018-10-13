@@ -30,7 +30,8 @@ class SolarSystem
                                             double mass);
         
         void calculateForcesAndEnergy ();
-        //void calculateForces ();
+        void calculateForcesAndPE ();
+        void calculateAngMomAndKE ();
         int numberOfBodies () const;
         
         // Getters
