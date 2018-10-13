@@ -26,7 +26,8 @@ void SolarSystem::calculateForcesAndEnergy ()
 
     // Reset forces on all bodies
     for (CelestialBody &body : this->bods) {
-        body.force = {0, 0, 0};
+        body.past_force = body.force;
+        body.resetForce();
     }
 
     for (int i = 0; i < this->numberOfBodies(); i++) {
@@ -35,7 +36,7 @@ void SolarSystem::calculateForcesAndEnergy ()
         for (int j = i+1; j < this->numberOfBodies(); j++) {
             CelestialBody &body2 = this->bods[j];
             arma::vec3 deltaRVector = body1.position - body2.position;
-            arma::vec3 normRVector = arma::normalise(deltaRVector);
+            arma::vec3 normRVector = arma::normalise(deltaRVector, 2);
 
             // Euclidean distance is the L2-norm
             double dr = arma::norm(deltaRVector, 2);
@@ -49,10 +50,12 @@ void SolarSystem::calculateForcesAndEnergy ()
             body2.force -= (U / dr) * normRVector;
         }
 
+        // Calculate kinetic enerfy
         this->ke += 0.5 * body1.mass 
                   * arma::dot(body1.velocity, body1.velocity);
         
-        this->angMom += arma::cross(body1.position, 
+        // Calculate angular momentum
+        this->angMom += arma::cross(body1.position,
                                     body1.mass * body1.velocity);
     }
 }

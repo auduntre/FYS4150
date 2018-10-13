@@ -30,8 +30,10 @@ class SolarSystem
                                             double mass);
         
         void calculateForcesAndEnergy ();
+        //void calculateForces ();
         int numberOfBodies () const;
         
+        // Getters
         double totalEnergy () const;
         double potentialEnergy () const;
         double kineticEnergy () const;

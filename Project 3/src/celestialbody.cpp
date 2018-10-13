@@ -3,9 +3,9 @@
 CelestialBody::CelestialBody (arma::vec3 pos, arma::vec3 vel, double m) :
     position(pos),
     velocity(vel),
-    mass(m),
-    past_position(pos)
+    mass(m)
 {
+    this->resetForce(); // Make sure forces is initialised
 }
 
 
@@ -15,7 +15,6 @@ CelestialBody::CelestialBody (double x, double y, double z, double vx,
 {
     this->position = {x, y, z};
     this->velocity = {vx, vy, vz};
-    this->past_position = this->position;
 }
 
 
