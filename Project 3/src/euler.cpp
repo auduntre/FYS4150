@@ -14,13 +14,13 @@ void Euler::integrateOneStep (SolarSystem &system)
         body.velocity += (body.force / body.mass) * this->dt;
     }
 
-    system.calculateForcesAndEnergy();
+    system.calculateForcesAndEnergy(true, true);
 }
 
 
 void Euler::initialStep(class SolarSystem &system)
 {
-    system.calculateForcesAndEnergy();
+    system.calculateForcesAndEnergy(true, true);
     
     this->integrateOneStep (system);
 

@@ -1,20 +1,21 @@
 IDIR = ../include
 CXX = g++
-CXXFLAGS = -I$(IDIR) -std=c++11 -larmadillo -O3 #-fopt-info-all
+CXXFLAGS = -I$(IDIR) -std=c++11 -larmadillo -O3 #-ffast-math #-fopt-info-all
 
 ODIR = obj
 
-_DEPS = euler.h verlet.h solarsystem.h celestialbody.h
+_DEPS = euler.h verlet.h solarsystem.h celestialbody.h betasolarsystem.h gensolarsystem.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = euler.o verlet.o solarsystem.o celestialbody.o main.o
+_OBJ = euler.o verlet.o solarsystem.o celestialbody.o betasolarsystem.o \
+	   gensolarsystem.o twobody.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
 $(ODIR)/%.o: %.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-solarsystem: $(OBJ)
+twobody: $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 

@@ -10,6 +10,8 @@ class CelestialBody
         arma::vec3 position;
         arma::vec3 velocity;
         arma::vec3 force;
+
+        double orbAngMom;
         double mass;
         
         arma::vec3 past_force;
@@ -17,8 +19,9 @@ class CelestialBody
         CelestialBody (arma::vec3 pos, arma::vec3 vel, double m);
         CelestialBody (double x, double y, double z, double vx, double vy,
                        double vz, double mass);
-        
-        void resetForce();
+
+        void computeOrbitalAngMom (); 
+        void resetForce ();
 };
 
 #endif

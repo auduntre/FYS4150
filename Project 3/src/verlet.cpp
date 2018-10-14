@@ -15,7 +15,7 @@ void Verlet::integrateOneStep (SolarSystem &system)
                       + 0.5 * (body.force / body.mass) * this->dtdt;
     }
     
-    system.calculateForcesAndPE();
+    system.calculateForcesAndEnergy(true, false);
 
     for (CelestialBody &body : system.bodies()) {
         body.velocity = body.velocity + 0.5 * this->h()
@@ -23,5 +23,5 @@ void Verlet::integrateOneStep (SolarSystem &system)
                       + body.force / body.mass);
     }
 
-    system.calculateAngMomAndKE();
+    system.calculateForcesAndEnergy(false, true);
 }

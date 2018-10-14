@@ -6,6 +6,7 @@ CelestialBody::CelestialBody (arma::vec3 pos, arma::vec3 vel, double m) :
     mass(m)
 {
     this->resetForce(); // Make sure forces is initialised
+    this->computeOrbitalAngMom();
 }
 
 
@@ -15,6 +16,16 @@ CelestialBody::CelestialBody (double x, double y, double z, double vx,
 {
     this->position = {x, y, z};
     this->velocity = {vx, vy, vz};
+    
+    this->resetForce(); // Make sure forces is initialised
+    this->computeOrbitalAngMom();
+}
+
+
+void CelestialBody::computeOrbitalAngMom ()
+{
+    // This is wrong
+    this->orbAngMom = arma::norm(arma::cross(this->position, this->velocity));
 }
 
 

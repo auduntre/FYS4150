@@ -21,7 +21,6 @@ class SolarSystem
         arma::vec3 angMom;
         double ke;  // Kinetic Energy
         double pe;  // Potential Energy
-        double beta; // force-beta
 
     public:
         SolarSystem();
@@ -29,10 +28,9 @@ class SolarSystem
         CelestialBody &createCelestialBody (arma::vec3 position, arma::vec3 velocity,
                                             double mass);
         
-        void calculateForcesAndEnergy ();
-        void calculateForcesAndPE ();
-        void calculateAngMomAndKE ();
-        
+        void calculateForcesAndEnergy (bool forceAndPE, bool angMomAndKE);
+        virtual double forcePower (double r);
+
         // Getters
         int numberOfBodies () const;
         double totalEnergy () const;
@@ -40,9 +38,6 @@ class SolarSystem
         double kineticEnergy () const;
         arma::vec3 angularMomentum () const;
         std::vector<CelestialBody> &bodies ();
-
-        //Setters
-        void setBeta (double b);
         
         void writeToFile (std::string filename);
         

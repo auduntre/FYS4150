@@ -3,8 +3,7 @@
 
 SolarSystem::SolarSystem () : 
     ke(0),
-    pe(0),
-    beta(2.0)
+    pe(0)
 {
 }
 
@@ -18,63 +17,62 @@ CelestialBody &SolarSystem::createCelestialBody (arma::vec3 position,
 }
 
 
-void SolarSystem::calculateForcesAndEnergy ()
+void SolarSystem::calculateForcesAndEnergy (bool forceAndPE, bool angMomAndKE)
 {
-    this->calculateForcesAndPE();
-    this->calculateAngMomAndKE();
-}
-
-
-void SolarSystem::calculateForcesAndPE ()
-{
-    this->pe = 0;
+    if (angMomAndKE) {
+        this->ke = 0;
+        this->angMom = {0, 0, 0};
+    }
     
     // Reset forces on all bodies
-    for (CelestialBody &body : this->bods) {
-        body.past_force = body.force;
-        body.resetForce();
+    if (forceAndPE) {
+        this->pe = 0;
+        
+        for (CelestialBody &body : this->bods) {
+            body.past_force = body.force;
+            body.resetForce();
+        }
     }
     
     for (int i = 0; i < this->numberOfBodies(); i++) {
         CelestialBody &body1 = this->bods[i];
 
-        for (int j = i+1; j < this->numberOfBodies(); j++) {
-            CelestialBody &body2 = this->bods[j];
-            arma::vec3 deltaRVector = body1.position - body2.position;
-            arma::vec3 normRVector = arma::normalise(deltaRVector, 2);
+        if (forceAndPE) {
+            for (int j = i+1; j < this->numberOfBodies(); j++) {
+                CelestialBody &body2 = this->bods[j];
+                arma::vec3 deltaRVector = body1.position - body2.position;
+                arma::vec3 normRVector = arma::normalise(deltaRVector, 2);
 
-            // Euclidean distance is the L2-norm
-            double dr = arma::norm(deltaRVector, 2);
+                // Euclidean distance is the L2-norm
+                double dr = arma::norm(deltaRVector, 2);
 
-            // Calculate potential energy
-            double U = - GravConst * body1.mass * body2.mass / dr;
-            this->pe += U;
+                // Calculate potential energy
+                double U = - GravConst * body1.mass * body2.mass / dr;
+                this->pe += U;
 
-            // Calculate the force
-            double drPow = std::pow(dr, beta - 1.0);
-            body1.force += (U / drPow) * normRVector;
-            body2.force -= (U / drPow) * normRVector;
+                // Calculate the force
+                double drPow = this->forcePower(dr);
+                body1.force += (U / drPow) * normRVector;
+                body2.force -= (U / drPow) * normRVector;
+            }
+        }
+    
+        if (angMomAndKE) {
+            // Calculate kinetic enerfy
+            this->ke += 0.5 * body1.mass 
+                      * arma::dot(body1.velocity, body1.velocity);
+        
+            // Calculate angular momentum
+            this->angMom += arma::cross(body1.position,
+                                        body1.mass * body1.velocity);
         }
     }
 }
 
 
-void SolarSystem::calculateAngMomAndKE ()
+double SolarSystem::forcePower (double r)
 {
-    this->ke = 0;
-    this->angMom = {0, 0, 0};
-    
-    for (int i = 0; i < this->numberOfBodies(); i++) {
-        CelestialBody &body1 = this->bods[i];
-
-        // Calculate kinetic enerfy
-        this->ke += 0.5 * body1.mass 
-                  * arma::dot(body1.velocity, body1.velocity);
-        
-        // Calculate angular momentum
-        this->angMom += arma::cross(body1.position,
-                                    body1.mass * body1.velocity);
-    }
+    return r;
 }
 
 
@@ -111,12 +109,6 @@ arma::vec3 SolarSystem::angularMomentum () const
 std::vector<CelestialBody> &SolarSystem::bodies ()
 {
     return this->bods;
-}
-
-
-void SolarSystem::setBeta (double b)
-{
-    this->beta = b;
 }
 
 
