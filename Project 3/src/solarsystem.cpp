@@ -131,4 +131,6 @@ void SolarSystem::writeToFile (std::string filename)
                     << body.position(1) << " " 
                     << body.position(2) << "\n";
     }
+
+    this->ofile.close();
 }
