@@ -25,7 +25,7 @@ int main (int argc, char **argv)
     SolarSystem sol;
 
     arma::vec3 pos = {0, 0, 0};
-    arma::vec3 vel = {0, 0, 0};
+    arma::vec3 vel = {0, -2.0526e-6, 0};
     double mass = 1.0;
 
     CelestialBody &sun = sol.createCelestialBody(pos, vel, mass);
@@ -39,23 +39,48 @@ int main (int argc, char **argv)
     std::vector<CelestialBody> &bodies = sol.bodies();
     bodyPrint(bodies);
 
-
     double dt = endTime / nTimesteps;
 
     std::cout << "################# CALCULATE #################" << std::endl;
     Verlet integrator(dt);
 
+    int matsize = (int) (0.05 * nTimesteps);
+    arma::mat posMat(3, matsize, arma::fill::zeros); 
+    arma::vec posNormMat(matsize, arma::fill::zeros);
 
-    arma::mat posMat(3, nTimesteps, arma::fill::zeros); 
-    posMat.col(0) = mercury.position;
+    posMat.col(0) = mercury.position - sun.position;
+    posNormMat(0) = arma::norm(posMat.col(0), 2);
     integrator.initialStep(sol);
 
-    for (int i = 1; i < nTimesteps; i++) {
-        posMat.col(i) = mercury.position;
+    for (int i = 1; i <= nTimesteps - matsize; i++) {
         integrator.integrateOneStep(sol);
     }
 
-    posMat.save("../positions/mercury.txt", arma::raw_ascii);
+    for (int i = 1; i < matsize; i++) {
+        posMat.col(i) = mercury.position - sun.position;
+        posNormMat(i) = arma::norm(posMat.col(i), 2);
+
+        integrator.integrateOneStep(sol);
+    }
+
+    int nPeri = (int) (endTime / 0.24);
+    int kPeri = 0;
+
+    arma::mat periMat(3, nPeri, arma::fill::zeros);
+
+    // Finding perihelion
+    for (int i = 1; i < posNormMat.n_elem - 1; i++) {
+        if (posNormMat(i) < posNormMat(i+1) && 
+            posNormMat(i) < posNormMat(i-1)) 
+        {
+            if (kPeri < nPeri) {
+                periMat.col(kPeri) = posMat.col(i);
+                kPeri++;
+            }
+        }
+    }
+
+    periMat.save("../positions/mercury.txt", arma::raw_ascii);
 
     bodyPrint(bodies);
 
