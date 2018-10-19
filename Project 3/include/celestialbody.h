@@ -10,8 +10,8 @@ class CelestialBody
         arma::vec3 position;
         arma::vec3 velocity;
         arma::vec3 force;
-
-        double orbAngMom;
+        arma::vec3 orbAngMom;
+        
         double mass;
         
         arma::vec3 past_force;

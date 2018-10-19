@@ -24,8 +24,8 @@ CelestialBody::CelestialBody (double x, double y, double z, double vx,
 
 void CelestialBody::computeOrbitalAngMom ()
 {
-    // This is wrong
-    this->orbAngMom = arma::norm(arma::cross(this->position, this->velocity));
+    // Per unit mass
+    this->orbAngMom = arma::cross(this->position, this->velocity);
 }
 
 

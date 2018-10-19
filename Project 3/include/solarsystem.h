@@ -29,7 +29,7 @@ class SolarSystem
                                             double mass);
         
         void calculateForcesAndEnergy (bool forceAndPE, bool angMomAndKE);
-        virtual double forcePower (double r);
+        virtual double forcePower (double r, CelestialBody body);
 
         // Getters
         int numberOfBodies () const;

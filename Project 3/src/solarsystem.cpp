@@ -51,9 +51,10 @@ void SolarSystem::calculateForcesAndEnergy (bool forceAndPE, bool angMomAndKE)
                 this->pe += U;
 
                 // Calculate the force
-                double drPow = this->forcePower(dr);
-                body1.force += (U / drPow) * normRVector;
-                body2.force -= (U / drPow) * normRVector;
+                double drPow1 = this->forcePower(dr, body1);
+                double drPow2 = this->forcePower(dr, body2);
+                body1.force += (U / drPow1) * normRVector;
+                body2.force -= (U / drPow2) * normRVector;
             }
         }
     
@@ -63,14 +64,15 @@ void SolarSystem::calculateForcesAndEnergy (bool forceAndPE, bool angMomAndKE)
                       * arma::dot(body1.velocity, body1.velocity);
         
             // Calculate angular momentum
-            this->angMom += arma::cross(body1.position,
-                                        body1.mass * body1.velocity);
+            body1.computeOrbitalAngMom();
+            this->angMom += body1.mass * body1.orbAngMom;
+
         }
     }
 }
 
 
-double SolarSystem::forcePower (double r)
+double SolarSystem::forcePower (double r, CelestialBody body)
 {
     return r;
 }

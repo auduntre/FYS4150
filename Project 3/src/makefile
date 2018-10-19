@@ -5,11 +5,11 @@ CXXFLAGS = -I$(IDIR) -std=c++11 -larmadillo -O3 #-ffast-math #-fopt-info-all
 ODIR = obj
 
 _DEPS = euler.h verlet.h solarsystem.h celestialbody.h betasolarsystem.h \
-		#gensolarsystem.h
+		gensolarsystem.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 _OBJ = euler.o verlet.o solarsystem.o celestialbody.o betasolarsystem.o \
-	   #gensolarsystem.o
+	   gensolarsystem.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 _TBOBJ = twobody.o

@@ -12,7 +12,7 @@ class BetaSolarSystem : public SolarSystem
     public:
         BetaSolarSystem (double b);
 
-        double forcePower (double r);
+        double forcePower (double r, CelestialBody body);
 }; 
 
 #endif
