@@ -85,10 +85,10 @@ void bodyPrint (SolarSystem &sol)
 {
     std::vector<CelestialBody> &bodies = sol.bodies();
 
-    std::cout << "The Systems AngMom:" << sol.angularMomentum().t();
-    std::cout << "The Systems KE:    " << sol.kineticEnergy() << std::endl;
-    std::cout << "The Systems PE:    " << sol.potentialEnergy() << std::endl;
-    std::cout << "The Systems TE:    " << sol.totalEnergy() << std::endl;
+    std::cout << "The System's AngMom:" << sol.angularMomentum().t();
+    std::cout << "The System's KE:    " << sol.kineticEnergy() << std::endl;
+    std::cout << "The System's PE:    " << sol.potentialEnergy() << std::endl;
+    std::cout << "The System's TE:    " << sol.totalEnergy() << std::endl;
 
     for(int i = 0; i < bodies.size(); i++) {
         CelestialBody &body = bodies[i];
