@@ -19,14 +19,14 @@ int main (int argc, char **argv)
     SolarSystem sol;
 
     arma::vec3 pos = {0, 0, 0};
-    arma::vec3 vel = {0, 0, 0};
+    arma::vec3 vel = {0, -1.8849555921538758e-05, 0};
     double mass = 1.0;
 
     CelestialBody &sun = sol.createCelestialBody(pos, vel, mass);
 
     pos = {1, 0, 0};
     vel = {0, 2*M_PI, 0};
-    mass  = 1e-6;
+    mass  = 3e-6;
 
     CelestialBody &earth = sol.createCelestialBody(pos, vel, mass);
 
@@ -35,6 +35,10 @@ int main (int argc, char **argv)
 
 
     double endTime = 1.0;
+
+    if (argc >= 3) {
+        endTime = std::atof(argv[2]);
+    }
     double dt = endTime / nTimesteps;
 
     std::cout << "################# CALCULATE #################" << std::endl;
