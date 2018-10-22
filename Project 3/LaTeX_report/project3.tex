@@ -68,181 +68,35 @@ In order to test that our algorithm works, we start by looking at a simple hypot
 \section{Methods}
 
 
-\subsection{Eigenvalue problems}
-Given the eigenvalue problem 
-
-\begin{equation} \label{eigenvalue}
-\textbf{A}\textbf{x}^{(v)}=\lambda^{(v)}\textbf{x}^{(v)}
-\end{equation}
-
-where \textbf{A} is a matrix of dimension $n$. We also have that $\lambda^{(v)}$ are the eigenvalues and $\textbf{x}^{(v)}$ the corresponding eigenvectors. From this we find that the eigenvalues of \textbf{A} are given by the $n$ roots of the characteristic polynomial given by:
+\subsection{Differential equations}
+The order of an ordinary differential equation (ODE) is given by the highest order of derivative found in the left-hand side of the equation. A first order differential equation is typically of the form 
 
 \begin{equation}
-P(\lambda)=\det(\lambda \textbf{I} - \textbf{A}) = \prod^{n}_{i=1}(\lambda_{i} - \lambda)
+\dfrac{dy}{dt} = f\big(t,\dfrac{dy}{dt},y\big)
 \end{equation}
 
-This procedure is only valid for problems where we only need a small fraction of the eigenvalues and eigenvectors, or if the matrix is on a tridiagonal form. As our matrix is tridiagonal we can use the above procedure which leads us to the Jacobi method. A general procedure for solving equation \eqref{eigenvalue} is to perform similarity transformations until the original matrix \textbf{A} is either on diagonal form or is a tridiagonal matrix which then easily can be diagonalized. The general procedure leads to the well known Householder's algorithm.\cite{Jensen}
-
-
-\subsection{Jacobi's method}
-Given an $n \times n$ orthogonal transformation matrix
+where $f$ is an arbitrary function. A well known second order differential equation is Newton's second law 
 
 \begin{equation}
-\textbf{S} =
-\begin{pmatrix}
-1 & 0 & \hdots & 0 & 0 & \hdots & 0 & 0 \\
-0 & 1 & \hdots & 0 & 0 & \hdots & 0 & 0 \\
-\hdots & \hdots & \hdots & \hdots & \hdots & \hdots & 0 & \hdots \\ 
-0 & 0 & \hdots & \cos \theta & 0 & \hdots & 0 & \sin \theta \\
-0 & 0 & \hdots & 0 & 1 & \hdots & 0 & 0 \\
-\hdots & \hdots & \hdots & \hdots & \hdots & \hdots & 0 & \hdots \\
-0 & 0 & \hdots & 0 & 0 & \hdots & 1 & 0 \\ 
-0 & 0 & \hdots & \sin \theta & \hdots & \hdots & 0 & \cos \theta \\
-\end{pmatrix}
+m \dfrac{d^2 x}{dt^2}=-kx
 \end{equation}
 
-with the property $\textbf{S}^{\textbf{T}}=\textbf{S}^{-\textbf{1}}$. This matrix performs a plane rotation around an angle $\theta$ in the Euclidean $n$-dimensional space. Which means that the non-zero matrix elements are given by
-\begin{equation}
-s_{kk}=s_{ll}=\cos \theta, \:\: s_{kl}=-s_{lk}=-\sin \theta, \:\: s_{ii}=-s_{ii}=1 \quad i \neq k \: \: i \neq l,
-\end{equation}
-
-A similarity transformation 
-
-\begin{equation}
-\textbf{B}=\textbf{S}_{u\textbf{T}} \textbf{A} \textbf{S},
-\end{equation}
-
-results in 
-
-\begin{flalign*}
-b_{ii} &= a_{ii}, \: i \neq k, i\neq l 
-\\
-b_{ik} &= a_{ik} \cos \theta - a_{il} \sin \theta, \: i \neq k, i\neq l 
-\\
-b_{il} &= a_{il} \cos \theta + a_{ik} \sin \theta, \: i \neq k, i\neq l 
-\\
-b_{kk} &= a_{kk} \cos^{2} \theta - 2 a_{kl} \cos \theta \, \sin \theta + 		a_{ll} \sin^{2} \theta 
-\\
-b_{ll} &= a_{all} \cos^{2} \theta + 2 a_{kl} \cos \theta \, \sin \theta + 		a_{kk} \sin^{2} \theta 
-\\
-b_{kl} &= (a_{kk} - a_{ll}) \cos \theta \, \sin \theta + a_{kl} (\cos^{2} \theta - sin^{2} \theta)
-\end{flalign*}
-
-We can choose the angle $\theta$ as we wish, while making sure that all the non-diagonal matrix elements, $b_{kl}$ become zero. The algorithm which follows is then quite simple. We do a number of similarity transformations until the sum over the squared non-diagonal matrix elements are less than some chosen tolerance, typically less than $10^{-8}$. We therefore seek to minimize
-
-\begin{equation}
-\text{off}(\textbf{A}) = \sqrt{\sum^{n}_{i=1} \sum^{n}_{j=1, \: j \neq i} a_{ij}^{2}}
-\end{equation}
+where $k$ is the force constant. All ODE's depend on one variable only, compared to partial differential equations which can depend on several variables. PDE's are widely used, but won't be of any concern in this project.
 
 
+\subsection{Newton's law of gravitation}
 
-\subsection{Scaling equations}
-\paragraph{Transformation matrix}
 
-For Jacobi's method the the rotational elements $\sin \theta = s$ and $\cos \theta = c$ with $\tan \theta = t = s / c$ is given by:
-
-\begin{equation}
-\cot 2\theta = \tau = \frac{a_{ll} - a_{kk}}{2 a_{kl}}
-\end{equation}
-
-\begin{equation}
-\cot 2\theta = \frac{1}{2}\left(\cot \theta - \tan \theta \right) \implies t^2 + 2 \tau t - 1 = 0 \implies t = -\tau \pm \sqrt{1 + \tau^2} 
-\end{equation}
-
-\begin{equation}
-c = \frac{1}{\sqrt{1+ t^2}}
-\end{equation}
-
-\begin{equation}
-s = t\,c
-\end{equation}
-
-For $t$ we choose the solution to the 2nd degree formula that returns the smallest answer so that $t$ does not reach very high values. We do this because of the risk for loss of significance because of cancellation in the equation for $t$ when $\tau$ becomes so big that $\sqrt{1 + \tau^2} \approx \tau $.
-
-\begin{equation}
-t = \frac{1}{\tau + \sqrt{1 + \tau^2}}, \quad \tau > 0.0
-\end{equation}
-
-\begin{equation}
-t = \frac{-1}{-\tau + \sqrt{1 + \tau^2}}, \quad \tau \leq 0.0
-\end{equation}
-
-These two solutions are equivalent to the smallest solution of the 2nd degree equation, and are numerical stable.
-
-\paragraph{Quantum mechanics}
-We are also interested in quantum mechanical problems where we want to solve the radial part of Schr\"{o}dinger's equation for one electron in a harmonic oscillator potential. The equation is given as:
-
-\begin{equation}
--\dfrac{\hbar^2}{2m}\Big(\dfrac{1}{r^2} \dfrac{d}{dr} r^2 \dfrac{d}{dr} - \dfrac{l(l+1)}{r^2} \Big) R(r) +V(r)R(r)=E \, R(r)
-\end{equation}
-
-$V(r)$ for a harmonic oscillator potential is given as $V(r)=\frac{1}{2}kr^2$ with \\$k=m \omega^2$ and where $E$ is the energy of the harmonic oscillator in three dimensions. $\omega$ is the oscillator frequency, and the energies are given as:
-
-\begin{equation}
-E_{nl} = \hbar \omega \Big(2n+l+\frac{3}{2} \Big), \: \text{with} \: n=0,1,2, \hdots \: \text{and} \: l=0,1,2,\hdots
-\end{equation}
-
-Since we have made the transformation into spherical coordinates we have $r \in [0, \infty)$, and the quantum number $l$ is the orbital momentum of the electron. We then substitute $R(r)=\dfrac{1}{r}u(r)$ and get
-
-\begin{equation}
-\dfrac{\hbar^2}{2m} \dfrac{d^2}{dr^2} u(r) + \Big(V(r) + \dfrac{l(l+1)}{r^2} \dfrac{\hbar^2}{2m}\Big) u(r) = E \, u(r)
-\end{equation}
-
-With boundary conditions $u(0)=0$ and $u(\infty)=0$. We introduce the dimensionless variable $\rho = (1/\alpha)r$ where $\alpha$ is a constant with dimension length. We set $l=0$, and insert $V(\rho)=(1/2)k\alpha^2 \rho^2$. This gives us the following equation
-
-\begin{equation}
--\dfrac{\hbar^2}{2m\alpha^2} \dfrac{d^2}{d\rho^2} \, u(\rho) + \dfrac{k}{2} \alpha^2 \rho^2 \, u(\rho) = E \, u(\rho) \quad |\cdot \dfrac{2m\alpha^2}{\hbar^2}
-\end{equation}
-
-\begin{equation}
--\dfrac{d^2}{d\rho^2} \, u(\rho) + \dfrac{mk}{\hbar^2} \alpha^4 \rho^2 \, u(\rho) = \dfrac{2m\alpha^2}{\hbar^2} E \, u(\rho) 
-\end{equation}
-
-Fixing the constant $\alpha$ as 
-
-\begin{equation}
-\alpha=\Big(\dfrac{\hbar^2}{mk}\Big)^{\frac{1}{4}}
-\end{equation} 
-
-We also define $\lambda=\dfrac{2m\alpha^2}{\hbar^2}E$ which lets us write the Schr\"{o}dinger equation as
-
-\begin{equation}
--\dfrac{d^2}{d\rho^2}u(\rho) + \rho^2 \, u(\rho) = \lambda \, u(\rho)
-\end{equation}
-
-A lot of the same steps as above are repeated for the problem considering quantum dots in three dimensions with two electrons. I will therefore only state the final result along with the necessary constants that are defined. We then find the Schr\"{o}dinger equation as:
-
-\begin{equation}
--\dfrac{d^2}{d\rho^2}\psi(\rho) + \omega^2_{r}\rho^2 \, u(\rho) + \frac{1}{\rho} = \lambda \, \psi(\rho)
-\end{equation}
-
-where we have defined  $\omega_{r}^2$ as
-
-\begin{equation}
-\omega^2_{r}=\dfrac{1}{4} \dfrac{mk}{\hbar^2} \alpha^4
-\end{equation}
-
-and fixing $\alpha$ by requiring 
-
-\begin{equation}
-\alpha = \dfrac{\hbar^2}{m\beta e^2}.
-\end{equation}
-
-Finally we have defined $\lambda$ as
-
-\begin{equation}
-\lambda=\dfrac{m\alpha^2}{\hbar^2}E
-\end{equation}
-
+\subsection{Discretizing differential equations}
 
 
 \subsection{Implementation}
 
-For the Jacobi's rotation method we implemented the algorithm given on page 217 in \cite{Jensen} and using the scaling and rewriting we have done the transformation matrix. In the github repository cited below the program can be found in the \verb+jacobi.cpp+ file. In order to find the highest valued off-diagonal element we took the upper triangular part of the matrix given, removed the diagonal, and then used Armadillos own methods to find the maximum absolute value element. For further details regarding implementation, see comments in the different programs.
+.\cite{H-Jensen} 
 
 
 \paragraph{}
-All our code, calculations, unittests, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%202}{Auduns GitHub repository}.
+All our code, calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%203}{Auduns GitHub repository}.
 
 \section{Results}
 \subsection{Preservation of dot product}
