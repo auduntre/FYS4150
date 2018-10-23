@@ -228,8 +228,41 @@ y_{i+1} = y_{i} + h v_{y,i},
 v_{y,i+1} = v_{y,i} - h \dfrac{4 \pi^2}{r_{i}^3}y_{i}.
 \end{equation}
 
+When adding more planets these equations have to be modified. We will show how this is done in the case of adding Jupiter to our system. The additional gravitational force on Earth from Jupiter in the x-direction is 
+
+\begin{equation}
+F_{x}^{EJ} = -\dfrac{G M_{J} M_{E}}{r^3_{EJ}}(x_{E} - x_{J}),
+\end{equation}
+
+where $M_{E}$ is the mass of the Earth, $M_{J}$ is the mass of Jupiter, and 
+
+\begin{equation}
+r_{EJ}=\sqrt{(x_{E}-x_{J})^2 + (y_{E}- y_{J})^2 }.
+\end{equation}
+
+$x_{E}$ and $y_{E}$ are the $x$ and $y$ coordinates of Earth, while $x_{J}$ and $y_{J}$ are the $x$ and $y$ coordinates of Jupiter. Thus the velocity of Earth changes as
+
+\begin{equation}
+\dfrac{dv_{x}^{E}}{dt}=-\dfrac{G M_{\odot}}{r^3}x_{E} - \dfrac{G M_{J}}{r_{EJ}^3}(x_{E}-x_{J})
+\end{equation}
+
+By using $G M_{J} = G M_{\odot} \Big(\dfrac{M_{J}}{M_{\odot}}\Big)=4\pi^2 \dfrac{M_{J}}{M_{\odot}}$ we can rewrite the equation as
+
+\begin{equation}
+\dfrac{dv_{x}^{E}}{dt}=-\dfrac{4\pi^2}{r^3}x_{E} - \dfrac{4\pi^2 \frac{M_{J}}{M_{\odot}} }{r_{EJ}^3}(x_{E}-x_{J}).
+\end{equation}
+
+Similarly for the y-direction we get
+
+\begin{equation}
+\dfrac{dv_{y}^{E}}{dt}=-\dfrac{4\pi^2}{r^3}y_{E} - \dfrac{4\pi^2 \frac{M_{J}}{M_{\odot}} }{r_{EJ}^3}(y_{E}-y_{J}).
+\end{equation}
+
+These equations also apply to Jupiter, and very similar equations apply to the other possible planets we might add to our system.
 
 \subsubsection{Velocity Verlet method}
+
+
 
 The final equations for position and velocity are then given by
 
