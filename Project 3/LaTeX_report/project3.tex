@@ -258,11 +258,44 @@ Similarly for the y-direction we get
 \dfrac{dv_{y}^{E}}{dt}=-\dfrac{4\pi^2}{r^3}y_{E} - \dfrac{4\pi^2 \frac{M_{J}}{M_{\odot}} }{r_{EJ}^3}(y_{E}-y_{J}).
 \end{equation}
 
-These equations also apply to Jupiter, and very similar equations apply to the other possible planets we might add to our system.
+These equations also apply to Jupiter, and very similar equations apply to the other possible planets we might add to our system. \cite{ODE}
 
 \subsubsection{Velocity Verlet method}
+We have the Taylor expansion for the position given by
 
+\begin{equation}
+x_{i+1}=x_{i} + h x_{i}^{(1)} + \dfrac{h^2}{2} x_{i}^{(2)} + O(h^3).
+\end{equation}
 
+The corresponding expansion for the velocity is 
+
+\begin{equation}
+v_{i+1} = v_{i} +h v_{i}^{(1)} + \dfrac{h^2}{2} v_{i}^{(2)} + O(h^3).
+\end{equation}
+
+From Newton's second law we have an analytical expression for the derivative of the velocity
+
+\begin{equation}
+v_{i}^{(1)}=\dfrac{d^2x}{dt^2}\rvert_{i} = \dfrac{F(x_{i}, t_{i})}{m}.
+\end{equation}
+
+By adding this to the corresponding expansion for the derivative of the velocity 
+
+\begin{equation}
+v_{i+1}^{(1)} = v_{i}^{(1)} + h v_{i}^{(2)} + O(h^2),
+\end{equation}
+
+and keep the terms up to the second derivative because our error is of order $O(h^3)$, we get
+
+\begin{equation}
+h v_{i}^{(2)} \approx v_{i+1}^{(1)} - v_{i}^{(1)}.
+\end{equation}
+
+We can then rewrite the Taylor expansion for the velocity as 
+
+\begin{equation}
+v_{i+1} = v_{i} + \dfrac{h}{2}\Big( v_{i+1}^{(1)} + v_{i}^{(1)} \Big) + O(h^3)
+\end{equation}
 
 The final equations for position and velocity are then given by
 
@@ -276,7 +309,7 @@ and
 v_{i+1} = v_{i} + \dfrac{h}{2} \Big( v_{i+1}^{(1)} +v_{i}^{(1)} \Big) + O(h^3).
 \end{equation}
 
-
+Note that the term $v_{i+1}^{(1)}$ depends on $x_{i+1}$, and as such we have to calculate the position at $t_{i+1}$ before computing the velocity at the updated time. \cite{ODE}
 
 \subsection{Implementation}
 
