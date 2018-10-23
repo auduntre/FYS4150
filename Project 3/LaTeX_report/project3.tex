@@ -138,7 +138,30 @@ Pluto    &    $M_{\text{Pluto}}=1.31 \times 10^{22} $ kg &  $7.40 \times 10^{-9}
 \end{center}
 \end{table}
 
+We include Pluto, even though it is technically not regarded as a planet anymore. 
+
 \subsection{Discretizing differential equations}
+We assume that Earth's orbit is circular around the Sun. For circular motion we have
+
+\begin{equation}
+F_{G} = \dfrac{M_{\text{Earth}}v^2}{r}=\dfrac{GM_{\odot} M_{\text{Earth}}}{r^2},
+\end{equation}
+
+where $v$ is Earth's velocity. By simple algebraic manipulation we find the relationship
+
+\begin{equation}
+v^2 r = G M_{\odot}=4 \pi^2 \: \text{AU}^3/\text{yr}^2
+\end{equation}
+
+By defining $M_{\odot} = 1$ we have $G=4\pi^2 \: \text{AU}^3/\text{yr}^2$.
+
+
+
+\subsubsection{Euler's forward algorithm}
+
+
+
+\subsubsection{Verlet method}
 
 
 \subsection{Implementation}
