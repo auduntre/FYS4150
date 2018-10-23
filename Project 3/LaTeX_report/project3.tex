@@ -158,11 +158,49 @@ By defining $M_{\odot} = 1$ we have $G=4\pi^2 \: \text{AU}^3/\text{yr}^2$.
 
 
 \subsubsection{Euler's forward algorithm}
+Suppose we have an initial function value $y(t_{0})=y(t=t_{0})$ for a function $y(t)$. The function is defined in the well-behaved domain $[a, b]$. By splitting the domain into $N$ sub intervals we find the step size $h$ as
+
+\begin{equation}
+h=\dfrac{b-a}{N}.
+\end{equation}
+
+Using the step size, $h$, and the derivative of $y$ we can find an expression for the function at the next time step as $y_{1}=y(t_{1}=t_{0}+h)$. We can generalize this method which gives us a general procedure for finding the step $y_{i+1}$ in terms of the previous time step.
+
+\begin{equation}
+y_{i+1}=y(t=t_{i}+h)=y(t_{i})+h \Delta \big(t_{i},y_{i}(t_{i}) \big) + O(h^{p+1}),
+\end{equation}
+
+where $O(h^{p+1})$ represents the truncation error. Using Taylor expansion we find 
+
+\begin{equation}
+\Delta \big(t_{i}, y_{i}(t_{i}) \big) =(y'(t_{i}) + \cdots + y^{(p)}(t_{i})\dfrac{h^{p-1}}{p!}
+\end{equation}
+
+By defining $y'(t_{i})=f(t_{i}, y_{i})$ and truncating $\Delta$ at the first derivative, we have 
+
+\begin{equation}
+y_{i+1}=y_{i} + h f(t_{i},y_{i}) + O(h^2)
+\end{equation}
+
+which combined with $t_{i+1}=t_{i}+h$ gives us Euler's forward algorithm. 
+
+\paragraph{}
+In our case we want to apply Euler's forward algorithm to Newton's 
 
 
+\subsubsection{Velocity Verlet method}
 
-\subsubsection{Verlet method}
+The final equations for position and velocity are then given by
 
+\begin{equation}
+x_{i+1} = x_{i} + h v_{i} + \dfrac{h^2}{2} v_{i}^{(1)} + O(h^3),
+\end{equation}
+
+and 
+
+\begin{equation}
+v_{i+1} = v_{i} + \dfrac{h}{2} \Big( v_{i+1}^{(1)} +v_{i}^{(1)} \Big) + O(h^3)
+\end{equation}
 
 \subsection{Implementation}
 
