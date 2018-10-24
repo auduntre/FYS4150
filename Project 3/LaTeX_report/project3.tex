@@ -58,8 +58,13 @@ citecolor=blue]{hyperref}
 \section{Abstract}
 We give a brief introduction to differential equations and how we can discretize such equations in order to solve them using computer algorithms. We then introduce the most important equations we meet in our project, namely Newton's law of gravitation, and Newton's second law of motion on differential form. In table \ref{PlanetMass} we present the masses and distance from the Sun of all the planets in our solar system. We choose to scale our equations in such a way that the mass of the Sun is $M_{\odot}\overset{\text{def}}{=} 1$, and as such we also need the masses of the planets given in the same unit.
 
+
 \paragraph{}
-More of our results can be found in the GitHub repository linked in the implementation section. 
+We find an analytical expression for the escape velocity needed for a planet to escape the gravitational pull of the Sun, $v_{e} = 2\sqrt{2} \, \pi$. We then present plots of Mercury's perihelion precession and how Mercury's orbit around the Sun is affected by general relativity.
+
+
+\paragraph{}
+The rest of our results can be found in the GitHub repository linked in the implementation section. 
 
 \section{Introduction}
 In this project we'll develop code for simulating the solar system, using the Verlet algorithm for solving coupled ordinary differential equations. For this project we will focus on the use of classes in our code, which makes it a lot easier to reuse larger parts of our code for problems of similar character. In our case of the solar system we can create a class describing a planet, a moon, or some other astronomical body which we want to include in our solar system.
@@ -325,10 +330,6 @@ In our implementation of the abovementioned methods we use a more general scheme
 All our code, calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%203}{Auduns GitHub repository}.
 
 \section{Results}
-\subsection{Object oriented code}
-
-Specify and explain important parts of the object oriented code we have implemented.
-
 
 \subsection{FLOPS}
 
@@ -414,18 +415,27 @@ v_{e} = \sqrt{\dfrac{2 G M_{\odot}}{r}} = \sqrt{8 \pi^2}=2 \sqrt{2} \: \pi \: \f
 
 \paragraph{}
 
-Try changing 
+We now try swapping
 
 \begin{equation}
 F_{G} = \dfrac{G M_{\odot} M_{E}}{r^2}
 \end{equation}
 
+with
 
 \begin{equation}
 F_{G} = \dfrac{G M_{\odot} M_{E}}{r^\beta}
 \end{equation}
 
-where $\beta \in [2,3]$. Comment results.
+where $\beta \in [2,3]$ for the Earth-Sun system, and plot the results.
+
+\begin{figure}[H]
+\includegraphics[scale=0.45]{plots/beta}
+\caption{When $\beta \rightarrow 3$ we see that the Earth-Sun system collapses inwards.}
+\label{fig:Beta}
+\end{figure}
+
+
 
 
 
@@ -447,18 +457,21 @@ where $x_{P}$ $(y_{P})$ is the $x$ $(y)$ position of Mercury at perihelion, whic
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{plots/GeneralRelativityMercury}
-\caption{Plot of Mercury's position at perihelion using the general relativistic correction term.}
+\includegraphics[scale=0.45]{plots/GeneralRelativityMercury}
+\caption{Plot of Mercury's position at perihelion for each year, starting in $x=1$ and $y=0$.}
 \label{GRMercury}
 \end{figure}
 
 
+
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{plots/PerihelionPrecessionMercury}
-\caption{Perihelion precession of Mercury.}
+\includegraphics[scale=0.45]{plots/PerihelionPrecessionMercury}
+\caption{Plot of the perihelion precession of Mercury over a century, measured in arcseconds.}
 \label{PerihelionMercury}
 \end{figure}
+
+As shown in figure \ref{PerihelionMercury} the perihelion precession of Mercury fits very nicely to the observed value when we use the numerical model including the general relativity correction term.
 
 
 \subsection{Method stability} 
@@ -466,13 +479,13 @@ where $x_{P}$ $(y_{P})$ is the $x$ $(y)$ position of Mercury at perihelion, whic
 
 
 \begin{figure}[H]
-\includegraphics[scale=0.4]{plots/velocityverlet}
+\includegraphics[scale=0.45]{plots/velocityverlet}
 \caption{Mercury's orbit using velocity Verlet method over 10 years with 100 and 1000 time steps.}
 \label{fig:Verlet}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[scale=0.4]{plots/euler}
+\includegraphics[scale=0.45]{plots/euler}
 \caption{Orbit of Mercury using Euler's method over a time period of 10 years. We test for 100, 1000, 10 000, and 100 000 time steps.}
 \label{fig:Euler}
 \end{figure}
@@ -488,8 +501,9 @@ As we can see from figures \ref{fig:Verlet} and \ref{fig:Euler}, we can achieve 
 %    \pgfplotstabletypeset[sci]{error.dat}
 %\end{table}
 
+\section{Conclusions}
 
-
+The results found using numerical methods with general relativity correction terms fit very well with known theory. We did not have the time to expand our code to a full solar system with all the planets, which would have been interesting to look at given we had more time.
 
 
 
