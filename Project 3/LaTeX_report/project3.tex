@@ -388,7 +388,7 @@ which sums up to 33 FLOPS. For the case with $N_b = 2$ bodies in the solar syste
 \frac{(16 + 6 + 12) \hspace{1mm} FLOPS}{(16 + 6 + 33) \hspace{1mm} FLOPS} \approx 0.62.
 \end{equation}
 
-In reality Euler's method would be using more time then $\approx 0.62$ of the velocity Verlet method because we are also measuring potential energy, kinetic energy, and the angular momentum which also requires a few FLOPS. So a ratio higher than $\approx 0.62$ is expected. Multiple rounds with the \verb+timemesure+ program gives an estimate of the ratio $\approx 0.9$.
+In reality Euler's method would be using more time then $\approx 0.62$ of the velocity Verlet method because we are also measuring potential energy, kinetic energy, and the angular momentum which also requires a few FLOPS. So a ratio higher than $\approx 0.62$ is expected. Multiple rounds with the \verb+timemesure+ program gives an estimate of the ratio $\approx 0.8$.
 
 
 \subsection{Escape velocity}
