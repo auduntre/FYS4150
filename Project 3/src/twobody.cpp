@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-#include <iomanip> 
+#include <iomanip>
+#include <string>
 
 #include "solarsystem.h"
 #include "euler.h"
@@ -19,13 +20,13 @@ int main (int argc, char **argv)
     SolarSystem sol;
 
     arma::vec3 pos = {0, 0, 0};
-    arma::vec3 vel = {0, -2.67e-5, 0};
+    arma::vec3 vel = {0, -1.8849555921538758e-05, 0};
     double mass = 1.0;
 
     CelestialBody &sun = sol.createCelestialBody(pos, vel, mass);
 
     pos = {1, 0, 0};
-    vel = {0, 8.9, 0};
+    vel = {0, 2 * M_PI, 0};
     mass  = 3e-6;
 
     CelestialBody &earth = sol.createCelestialBody(pos, vel, mass);
@@ -34,7 +35,7 @@ int main (int argc, char **argv)
     bodyPrint(bodies);
 
 
-    double endTime = 1.0;
+    double endTime = 10.0;
 
     if (argc >= 3) {
         endTime = std::atof(argv[2]);
@@ -43,12 +44,23 @@ int main (int argc, char **argv)
 
     std::cout << "################# CALCULATE #################" << std::endl;
     Euler integrator(dt);
-    integrator.integrateNtimes(sol, nTimesteps);
+    integrator.initialStep(sol);
+    
+    arma::mat posMat(3, nTimesteps, arma::fill::zeros); 
+    posMat.col(0) = earth.position;
+
+
+    for (int i = 1; i < nTimesteps; i++) {
+        integrator.integrateOneStep(sol);
+
+        posMat.col(i) = earth.position;
+    }
+
+    posMat.save("../positions/positions" + std::to_string(nTimesteps) + ".txt",
+                arma::raw_ascii);
 
     bodyPrint(bodies);
     
-    sol.writeToFile("../positions/positions.xyz");
-
     return 0;
 }
 
