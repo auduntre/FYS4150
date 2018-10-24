@@ -18,15 +18,31 @@ TBOBJ = $(patsubst %,$(ODIR)/%,$(_TBOBJ))
 _TBMOBJ = twobodymercury.o
 TBMOBJ = $(patsubst %,$(ODIR)/%,$(_TBMOBJ))
 
+_TBBOBJ = twobodybeta.o
+TBBOBJ = $(patsubst %,$(ODIR)/%,$(_TBBOBJ))
+
+_TME = timemeasure.o
+TME = $(patsubst %,$(ODIR)/%,$(_TME))
+
+
 
 $(ODIR)/%.o: %.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
+
+
+timemeasure: $(OBJ) $(TME)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
+
 
 twobody: $(OBJ) $(TBOBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 
 twobodymercury: $(OBJ) $(TBMOBJ)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
+
+
+twobodybeta: $(OBJ) $(TBBOBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 
