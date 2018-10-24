@@ -56,10 +56,15 @@ citecolor=blue]{hyperref}
 
 
 \section{Abstract}
-We give a brief introduction to differential equations and how we can discretize such equations in order to solve them using computer algorithms. 
+We give a brief introduction to differential equations and how we can discretize such equations in order to solve them using computer algorithms. We then introduce the most important equations we meet in our project, namely Newton's law of gravitation, and Newton's second law of motion on differential form. In table \ref{PlanetMass} we present the masses and distance from the Sun of all the planets in our solar system. We choose to scale our equations in such a way that the mass of the Sun is $M_{\odot}\overset{\text{def}}{=} 1$, and as such we also need the masses of the planets given in the same unit.
+
 
 \paragraph{}
-More of our results can be found in the GitHub repository linked in the implementation section. 
+We find an analytical expression for the escape velocity needed for a planet to escape the gravitational pull of the Sun, $v_{e} = 2\sqrt{2} \, \pi$. We then present plots of Mercury's perihelion precession and how Mercury's orbit around the Sun is affected by general relativity.
+
+
+\paragraph{}
+The rest of our results can be found in the GitHub repository linked in the implementation section. 
 
 \section{Introduction}
 In this project we'll develop code for simulating the solar system, using the Verlet algorithm for solving coupled ordinary differential equations. For this project we will focus on the use of classes in our code, which makes it a lot easier to reuse larger parts of our code for problems of similar character. In our case of the solar system we can create a class describing a planet, a moon, or some other astronomical body which we want to include in our solar system.
@@ -260,6 +265,9 @@ Similarly for the y-direction we get
 
 These equations also apply to Jupiter, and very similar equations apply to the other possible planets we might add to our system. \cite{ODE}
 
+
+
+
 \subsubsection{Velocity Verlet method}
 We have the Taylor expansion for the position given by
 
@@ -311,7 +319,6 @@ v_{i+1} = v_{i} + \dfrac{h}{2} \Big( v_{i+1}^{(1)} +v_{i}^{(1)} \Big) + O(h^3).
 
 Note that the term $v_{i+1}^{(1)}$ depends on $x_{i+1}$, and as such we have to calculate the position at $t_{i+1}$ before computing the velocity at the updated time. \cite{ODE}
 
-\subsection{Perihelion precession}
 
 
 \subsection{Implementation}
@@ -323,29 +330,124 @@ In our implementation of the abovementioned methods we use a more general scheme
 All our code, calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%203}{Auduns GitHub repository}.
 
 \section{Results}
-\subsection{Object oriented code}
 
-Specify and explain important parts of the object oriented code we have implemented.
+\subsection{FLOPS}
+
+If we have $N_b$ celestial body in our solar system the number of computations done to calculate the Force for all is:
+
+\begin{equation}
+\left((N_b  - 1) + \cdots + 1\right)(O(\textbf{F}_{G})),
+\end{equation}
+
+where $O(\textbf{F}_{G})$ is the number of FLOPS done to calculate the force between two bodies.
+
+\begin{equation}
+\left((N_b  - 1) + \cdots + 1\right) = \frac{(N_b  - 1) + 1}{2}(N_b - 1) = \frac{1}{2}(N_b^2 - N_b).
+\end{equation}
+
+\begin{equation}
+\textbf{F}_{G} = G\frac{m_i m_j}{r^2} \frac{\textbf{r}}{r} = 7 \hspace{1mm} FLOPS,
+\end{equation}
+
+where $r = |\textbf{r}| = \sqrt{r \cdot r}$ which for a body in 3 dimensional space takes 6 FLOPS. Here we count the square root as a single FLOP for simplicity's sakes.  $\textbf{r} = \textbf{x}_i - \textbf{x}_j$ which is 3 FLOPS (in 3D). 
+
+\begin{equation}
+O(\textbf{F}_{G}) = 16 \hspace{1mm} FLOPS
+\end{equation}
+
+\begin{equation}
+\left((N_b  - 1) + \cdots + 1\right)(O(\textbf{F}_{G})) = 8(N_b^2 - N_b) \hspace{1mm} FLOPS.
+\end{equation}
+
+
+Per timestep the number of floating points operations done is:
+
+\begin{equation}
+8(N_b^2 - N_b) \hspace{1mm}  FLOPS + O(IM) + O(\textbf{a}),
+\end{equation}
+
+where $O(\textbf{a}) = O(\textbf{F}_{G} / m) = 3N_b \hspace{1mm} FLOPS$ is the number of FLOPS done to calculate the accelearation of the bodies in the system. $O(IM)$ is the number of FLOPS the integration method takes. For Euler's method in 3 dimensions we have:
+
+\begin{equation}
+\textbf{x}_{i + 1} = \textbf{x}_i + h \textbf{v}_i = 3 \cdot 2 \hspace{1mm} FLOPS = 6 \hspace{1mm} FLOPS,
+\end{equation}
+
+\begin{equation}
+\textbf{v}_{i + 1} = \textbf{v}_i + h \textbf{a}_i = 3 \cdot 2 \hspace{1mm}  FLOPS = 6 \hspace{1mm} FLOPS,
+\end{equation}
+
+which sums up to 12 FLOPS. For the velocity Verlet method we have:
+
+\begin{equation}
+\textbf{x}_{i + 1} = \textbf{x}_i + h \textbf{v}_i + \frac{h^2}{2}a_i = 3 \cdot 6 \hspace{1mm} FLOPS = 18 \hspace{1mm} FLOPS,
+\end{equation}
+
+\begin{equation}
+\textbf{v}_{i + 1} = \textbf{v}_i + \frac{h}{2}(\textbf{a}_{i+1} + \textbf{a}_i = 3 \cdot 5 \hspace{1mm} FLOPS = 15 \hspace{1mm} FLOPS,
+\end{equation}
+
+which sums up to 33 FLOPS. For the case with $N_b = 2$ bodies in the solar system, we have that for each time step the ration between Euler's and velocity Verlet method is:
+
+\begin{equation}
+\frac{(16 + 6 + 12) \hspace{1mm} FLOPS}{(16 + 6 + 33) \hspace{1mm} FLOPS} \approx 0.62.
+\end{equation}
+
+In reality Euler's method would be using more time then $\approx 0.62$ of the velocity Verlet method because we are also measuring potential energy, kinetic energy, and the angular momentum which also requires a few FLOPS. So a ratio higher than $\approx 0.62$ is expected. Multiple rounds with the \verb+timemesure+ program gives an estimate of the ratio $\approx 0.8$.
 
 
 \subsection{Escape velocity}
 
-Find analytical result
+We can find an analytical result for the escape velocity needed for a planet, starting 1 AU from the Sun, to escape the Suns gravitational force. We use conservation of energy in order to solve this problem. The only significant force on the planet is the gravitational force from the Sun. As such we have conservation of energy according to
+
+\begin{equation}
+(K + U_{g})_{i}=(K+U_{g})_{f},
+\end{equation}
+
+where $K_{f}=0$ as the final velocity is equal to zero, and $U_{g,f} = 0$ because the distance between the Sun and the planet will go to infinity. Thus we have
+
+\begin{equation}
+\dfrac{1}{2} M_{planet} v_{e}^2 + \dfrac{- G M_{\odot} M_{planet}}{r} = 0 + 0
+\end{equation}
+
+\begin{equation}
+v_{e} = \sqrt{\dfrac{2 G M_{\odot}}{r}} = \sqrt{8 \pi^2}=2 \sqrt{2} \: \pi \: \frac{\text{AU}}{\text{yr}} \approx 42 \:  \text{km}/\text{s}
+\end{equation}
 
 \paragraph{}
 
-Try changing 
+We now try swapping
 
 \begin{equation}
 F_{G} = \dfrac{G M_{\odot} M_{E}}{r^2}
 \end{equation}
 
+with
 
 \begin{equation}
 F_{G} = \dfrac{G M_{\odot} M_{E}}{r^\beta}
 \end{equation}
 
-where $\beta \in [2,3]$. Comment results.
+where $\beta \in [2,3]$ for the Earth-Sun system, and plot the results.
+
+\begin{figure}[H]
+\includegraphics[scale=0.45]{plots/beta}
+\caption{When $\beta \rightarrow 3$ we see that the Earth-Sun system collapses inwards.}
+\label{fig:Beta}
+\end{figure}
+
+The escpace velocity of the earth-sun system is:
+
+\begin{equation}
+v_0 = \sqrt{8} \pi \frac{AU}{yr} \approx 8.8
+\end{equation}
+
+\begin{figure}[H]
+\includegraphics[scale=0.45]{plots/divergence}
+\caption{Orbit for diffirent initial velocities}
+\label{fig:Euler}
+\end{figure}
+
+We see that velocity Verlet method is stable and follows that over the escape velocity the orbit diverges and under it converges.
 
 
 
@@ -363,52 +465,58 @@ where $M_{Mercury}$ is the mass of Mercury, $r$ the distance between the Sun and
 \tan \theta_{P} = \dfrac{y_{P}}{x_{P}}
 \end{equation}
 
+where $x_{P}$ $(y_{P})$ is the $x$ $(y)$ position of Mercury at perihelion, which is the point where Mercury is closest to the Sun. Simulating a system consisting of only the Sun and Mercury over a century we plot the perihelion precession of Mercury.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{plots/GeneralRelativityMercury}
-\caption{Plot of Mercury's position at perihelion using the general relativistic correction term.}
+\includegraphics[scale=0.45]{plots/GeneralRelativityMercury}
+\caption{Plot of Mercury's position at perihelion for each year, starting in $x=1$ and $y=0$.}
 \label{GRMercury}
 \end{figure}
 
 
+
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{plots/PerihelionPrecessionMercury}
-\caption{Perihelion precession of Mercury.}
+\includegraphics[scale=0.45]{plots/PerihelionPrecessionMercury}
+\caption{Plot of the perihelion precession of Mercury over a century, measured in arcseconds.}
 \label{PerihelionMercury}
 \end{figure}
 
+As shown in figure \ref{PerihelionMercury} the perihelion precession of Mercury fits very nicely to the observed value when we use the numerical model including the general relativity correction term.
+
+
+\subsection{Method stability} 
+
+
+
 \begin{figure}[H]
-\includegraphics[scale=0.5]{plots/NewtonianMercury}
-\caption{Newtonian Mercury.}
-\label{fig:NewtonianMercury}
+\includegraphics[scale=0.45]{plots/velocityverlet}
+\caption{Mercury's orbit using velocity Verlet method over 10 years with 100 and 1000 time steps.}
+\label{fig:Verlet}
 \end{figure}
 
-\paragraph{}
-Testing Anders' code for automatic inclusion of data to table.
-\begin{table}[h!tb]
-    \centering
-    \caption{The greatest table.}
-    \pgfplotstabletypeset[sci]{error.dat}
-\end{table}
+\begin{figure}[H]
+\includegraphics[scale=0.45]{plots/euler}
+\caption{Orbit of Mercury using Euler's method over a time period of 10 years. We test for 100, 1000, 10 000, and 100 000 time steps.}
+\label{fig:Euler}
+\end{figure}
+
+As we can see from figures \ref{fig:Verlet} and \ref{fig:Euler}, we can achieve pretty nice results using both Euler's forward algorithm as well as the velocity Verlet algorithm. However we notice that in order to get a nice circular orbit we need 100 times more timesteps for Euler's method compared to velocity Verlet. I.e. in order to avoid divergence, Euler's method requires significantly more time steps.
 
 
+%\paragraph{}
+%Testing Anders' code for automatic inclusion of data to table.
+%\begin{table}[h!tb]
+%    \centering
+%    \caption{The greatest table.}
+%    \pgfplotstabletypeset[sci]{error.dat}
+%\end{table}
 
-\subsection{Eigenvalues of one electron in the harmonic oscillator}
 
+\section{Conclusions}
 
-
-
-
-
-
-\section{Discussion}
-\subsection{Verlet stability}
-3e)
-
-\subsection{Verlet vs. Euler} 
-
+The results found using numerical methods with general relativity correction terms fit very well with known theory. We did not have the time to expand our code to a full solar system with all the planets, which would have been interesting to look at given we had more time.
 
 
 

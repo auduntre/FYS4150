@@ -24,6 +24,9 @@ TBBOBJ = $(patsubst %,$(ODIR)/%,$(_TBBOBJ))
 _TME = timemeasure.o
 TME = $(patsubst %,$(ODIR)/%,$(_TME))
 
+_TEBOBJ = threebody.o
+TEBOBJ = $(patsubst %,$(ODIR)/%,$(_TEBOBJ))
+
 
 
 $(ODIR)/%.o: %.cpp $(DEPS)
@@ -43,6 +46,9 @@ twobodymercury: $(OBJ) $(TBMOBJ)
 
 
 twobodybeta: $(OBJ) $(TBBOBJ)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
+
+threebody: $(OBJ) $(TEBOBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 
