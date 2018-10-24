@@ -311,21 +311,63 @@ v_{i+1} = v_{i} + \dfrac{h}{2} \Big( v_{i+1}^{(1)} +v_{i}^{(1)} \Big) + O(h^3).
 
 Note that the term $v_{i+1}^{(1)}$ depends on $x_{i+1}$, and as such we have to calculate the position at $t_{i+1}$ before computing the velocity at the updated time. \cite{ODE}
 
+\subsection{Perihelion precession}
+
+
 \subsection{Implementation}
 
-.\cite{H-Jensen} 
+In our implementation of the abovementioned methods we use a more general scheme which allows us to implement any given formula for the acceleration. Thus we are not limited to the specified acceleration derived from circular motion, but have the opportunity to add other terms as well. 
 
 
 \paragraph{}
 All our code, calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%203}{Auduns GitHub repository}.
 
 \section{Results}
-\subsection{Preservation of dot product}
+\subsection{Object oriented code}
+
+Specify and explain important parts of the object oriented code we have implemented.
+
+
+\subsection{Escape velocity}
+
+Find analytical result
+
+\paragraph{}
+
+Try changing 
+
+\begin{equation}
+F_{G} = \dfrac{G M_{\odot} M_{E}}{r^2}
+\end{equation}
+
+
+\begin{equation}
+F_{G} = \dfrac{G M_{\odot} M_{E}}{r^\beta}
+\end{equation}
+
+where $\beta \in [2,3]$. Comment results.
+
+
+
+\subsection{Perihelion precession of Mercury}
+
+By adding a relativistic term to the Newtonian gravitational force we find
+
+\begin{equation}
+F_{G} = \dfrac{G M_{\odot} M_{Mercury}}{r^2}\Big[1 + \dfrac{3l^2}{r^2c^2} \Big],
+\end{equation}
+
+where $M_{Mercury}$ is the mass of Mercury, $r$ the distance between the Sun and Mercury, $l = \lvert \vec{r} \times \vec{v} \rvert$ is the magnitude of Mercury's orbital angular momentum per unit mass, and $c$ is the speed of light in vacuum. We then check the value of the perihelion angle, $\theta_{P}$, using
+
+\begin{equation}
+\tan \theta_{P} = \dfrac{y_{P}}{x_{P}}
+\end{equation}
+
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{plots/GeneralRelativityMercury}
-\caption{General relativity Mercury.}
+\caption{Plot of Mercury's position at perihelion using the general relativistic correction term.}
 \label{GRMercury}
 \end{figure}
 
@@ -362,9 +404,10 @@ Testing Anders' code for automatic inclusion of data to table.
 
 
 \section{Discussion}
-\subsection{Jacobi method}
+\subsection{Verlet stability}
+3e)
 
- 
+\subsection{Verlet vs. Euler} 
 
 
 
