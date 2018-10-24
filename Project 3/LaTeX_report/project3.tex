@@ -56,7 +56,7 @@ citecolor=blue]{hyperref}
 
 
 \section{Abstract}
-We give a brief introduction to differential equations and how we can discretize such equations in order to solve them using computer algorithms. 
+We give a brief introduction to differential equations and how we can discretize such equations in order to solve them using computer algorithms. We then introduce the most important equations we meet in our project, namely Newton's law of gravitation, and Newton's second law of motion on differential form. In table \ref{PlanetMass} we present the masses and distance from the Sun of all the planets in our solar system. We choose to scale our equations in such a way that the mass of the Sun is $M_{\odot}\overset{\text{def}}{=} 1$, and as such we also need the masses of the planets given in the same unit.
 
 \paragraph{}
 More of our results can be found in the GitHub repository linked in the implementation section. 
@@ -260,6 +260,9 @@ Similarly for the y-direction we get
 
 These equations also apply to Jupiter, and very similar equations apply to the other possible planets we might add to our system. \cite{ODE}
 
+
+
+
 \subsubsection{Velocity Verlet method}
 We have the Taylor expansion for the position given by
 
@@ -457,11 +460,25 @@ where $x_{P}$ $(y_{P})$ is the $x$ $(y)$ position of Mercury at perihelion, whic
 \label{PerihelionMercury}
 \end{figure}
 
+
+\subsection{Method stability} 
+
+
+
 \begin{figure}[H]
-\includegraphics[scale=0.5]{plots/NewtonianMercury}
-\caption{Newtonian Mercury.}
-\label{fig:NewtonianMercury}
+\includegraphics[scale=0.4]{plots/velocityverlet}
+\caption{Mercury's orbit using velocity Verlet method over 10 years with 100 and 1000 time steps.}
+\label{fig:Verlet}
 \end{figure}
+
+\begin{figure}[H]
+\includegraphics[scale=0.4]{plots/euler}
+\caption{Orbit of Mercury using Euler's method over a time period of 10 years. We test for 100, 1000, 10 000, and 100 000 time steps.}
+\label{fig:Euler}
+\end{figure}
+
+As we can see from figures \ref{fig:Verlet} and \ref{fig:Euler}, we can achieve pretty nice results using both Euler's forward algorithm as well as the velocity Verlet algorithm. However we notice that in order to get a nice circular orbit we need 100 times more timesteps for Euler's method compared to velocity Verlet.
+
 
 %\paragraph{}
 %Testing Anders' code for automatic inclusion of data to table.
@@ -472,14 +489,6 @@ where $x_{P}$ $(y_{P})$ is the $x$ $(y)$ position of Mercury at perihelion, whic
 %\end{table}
 
 
-
-
-
-\section{Discussion}
-\subsection{Verlet stability}
-3e)
-
-\subsection{Verlet vs. Euler} 
 
 
 
