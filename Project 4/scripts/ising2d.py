@@ -3,11 +3,12 @@
 
 from matplotlib import pyplot as plt
 from numba import jit
+
 import numpy as np
 import sys, math
 
 @jit(nopython=True)
-def periodic (i, limit, add):
+def periodic(i, limit, add):
     """
     Choose correct matrix index with periodic
     boundary conditions
@@ -20,8 +21,8 @@ def periodic (i, limit, add):
     return (i + limit + add) % limit
 
 
-@jit(nopython=True)
-def monteCarlo(temp, size, trials):
+@jit
+def monteCarlo(temp, size, trials, game=False, method=1):
     """
     Calculate the enerInvalid usage of BoundFunction(array.item for array(int64, 2d, C)) with parameters (int64, int64)
     * parameterizegy and magnetization
@@ -42,14 +43,16 @@ def monteCarlo(temp, size, trials):
     spin_matrix = np.zeros( (size,size), np.int8) + 1
 
     #Create and initialize variables
-    E = 0
-    E_av = E2_av = 0
+    E = M = 0
+    E_av = E2_av = M_av = M2_av = Mabs_av = 0
 
     #Setup array for possible energy changes
     w = np.zeros(17, np.float64)
     for de in range(-8, 9, 4): #include +8
         w[de+8] = math.exp(-de/temp)
 
+    # Calculate initial magnetization
+    M = spin_matrix.sum()
     #Calculate initial energy
     for j in range(size):
         for i in range(size):
@@ -61,8 +64,8 @@ def monteCarlo(temp, size, trials):
         #Metropolis
         #Loop over all spins, pick a random spin each time
         for s in range(size**2):
-            x = int(np.random.random()*size)
-            y = int(np.random.random()*size)
+            x = int(np.random.random() * size)
+            y = int(np.random.random() * size)
             deltaE = 2 * spin_matrix[x,y] * \
                      (spin_matrix[periodic(x, size, -1), y] +\
                       spin_matrix[periodic(x, size, 1),  y] +\
@@ -71,20 +74,30 @@ def monteCarlo(temp, size, trials):
             if np.random.random() <= w[deltaE+8]:
                 #Accept!
                 spin_matrix[x,y] *= -1
+                M += 2 * spin_matrix[x, y]
                 E += deltaE
 
         #Update expectation values
         E_av    += E
         E2_av   += E**2
+        M_av    += M
+        M2_av   += M**2
+        Mabs_av += int(math.fabs(M))
 
-    E_av       /= float(trials);
-    E2_av      /= float(trials);
+    E_av       /= float(trials)
+    E2_av      /= float(trials)
+    M_av       /= float(trials)
+    M2_av      /= float(trials)
+    Mabs_av    /= float(trials)
     #Calculate variance and normalize to per-point and temp
-    E_variance  = (E2_av-E_av*E_av)/float(size*size*temp*temp);
+    E_variance  = (E2_av - E_av * E_av) / float(size * size * temp * temp)
+    M_variance  = (M2_av - M_av * M_av) / float(size * size * temp)
     #Normalize returned averages to per-point
-    E_av       /= float(size*size);
+    E_av       /= float(size * size)
+    M_av       /= float(size * size)
+    Mabs_av    /= float(size * size)
 
-    return (E_av, E_variance)
+    return (E_av, E_variance, M_av, M_variance, Mabs_av)
 
 
 def main():
@@ -105,7 +118,7 @@ def main():
     temperature = np.zeros(Dim)
     
     for i, temp in enumerate(temps):
-        (E_av, E_variance) = monteCarlo(temp,size,trials)
+        (E_av, E_variance, _, _, _) = monteCarlo(temp,size,trials)
         temperature[i] = temp
         energy[i] = E_av
         heatcapacity[i] = E_variance
@@ -122,8 +135,9 @@ def main():
     plt.xlabel(r'Temperature $J/(k_B)$')
     plt.ylabel(r'Heat capacity per spin  $C_V/N$')
     plt.savefig('energycv.pdf')
-    #plt.show()
+    plt.show()
 
 
 if __name__ == "__main__":
     main()
+
