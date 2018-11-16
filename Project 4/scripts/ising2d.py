@@ -21,7 +21,7 @@ def periodic(i, limit, add):
     return (i + limit + add) % limit
 
 
-@jit
+@jit(nopython=True, nogil=True)
 def monteCarlo(temp, size, trials, game=False, method=1):
     """
     Calculate the enerInvalid usage of BoundFunction(array.item for array(int64, 2d, C)) with parameters (int64, int64)
@@ -116,27 +116,36 @@ def main():
     energy = np.zeros(Dim)
     heatcapacity = np.zeros(Dim)
     temperature = np.zeros(Dim)
+    magnetization = np.zeros(Dim)
     
     for i, temp in enumerate(temps):
-        (E_av, E_variance, _, _, _) = monteCarlo(temp,size,trials)
+        (E_av, E_variance, M_av, _, _) = monteCarlo(temp, size, trials)
         temperature[i] = temp
         energy[i] = E_av
         heatcapacity[i] = E_variance
+        magnetization[i] = M_av
     
     plt.figure(1)
-    plt.subplot(211)
+    
+    plt.subplot(311)
     plt.axis([1.8,2.6,-2.0, -1.0])
     plt.xlabel(r'Temperature $J/(k_B)$')
     plt.ylabel(r'Average energy per spin  $E/N$')
     plt.plot(temperature, energy, 'b-')
-    plt.subplot(212)
+    
+    plt.subplot(312)
     plt.axis([1.8,2.6, 0.0, 2.0])
     plt.plot(temperature, heatcapacity, 'r-')
     plt.xlabel(r'Temperature $J/(k_B)$')
     plt.ylabel(r'Heat capacity per spin  $C_V/N$')
+
+    plt.subplot(313)
+    plt.axis([1.8,2.6, 0.0, 2.0])
+    plt.plot(temperature, magnetization, 'g-')
+    plt.xlabel(r'Temperature $J/(k_B)$')
+    plt.ylabel(r'Magnetization per spin  $M/N$')
     plt.savefig('energycv.pdf')
     plt.show()
-
 
 if __name__ == "__main__":
     main()
