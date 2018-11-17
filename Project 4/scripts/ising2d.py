@@ -84,18 +84,21 @@ def monteCarlo(temp, size, trials, game=False, method=1):
         M2_av   += M**2
         Mabs_av += int(math.fabs(M))
 
-    E_av       /= float(trials)
-    E2_av      /= float(trials)
-    M_av       /= float(trials)
-    M2_av      /= float(trials)
-    Mabs_av    /= float(trials)
+    ftrials = float(trials)
+    fsize2  = float(size * size)
+
+    E_av       /= ftrials
+    E2_av      /= ftrials
+    M_av       /= ftrials
+    M2_av      /= ftrials
+    Mabs_av    /= ftrials
     #Calculate variance and normalize to per-point and temp
-    E_variance  = (E2_av - E_av * E_av) / float(size * size * temp * temp)
-    M_variance  = (M2_av - M_av * M_av) / float(size * size * temp)
+    E_variance  = (E2_av - E_av * E_av) / (fsize2 *  temp * temp)
+    M_variance  = (M2_av - M_av * M_av) / (fsize2 * temp)
     #Normalize returned averages to per-point
-    E_av       /= float(size * size)
-    M_av       /= float(size * size)
-    Mabs_av    /= float(size * size)
+    E_av       /= fsize2
+    M_av       /= fsize2
+    Mabs_av    /= fsize2
 
     return (E_av, E_variance, M_av, M_variance, Mabs_av)
 
