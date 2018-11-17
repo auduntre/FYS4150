@@ -40,7 +40,7 @@ def monteCarlo(temp, size, trials, game=False, method=1):
     """
 
     #Setup spin matrix, initialize to ground state
-    spin_matrix = np.zeros( (size,size), np.int8) + 1
+    spin_matrix = np.zeros((size,size), np.int8) + 1
 
     #Create and initialize variables
     E = M = 0
@@ -100,6 +100,25 @@ def monteCarlo(temp, size, trials, game=False, method=1):
     return (E_av, E_variance, M_av, M_variance, Mabs_av)
 
 
+@jit(nopython=True):
+def temp_loop (temps, size, trials):
+    """Loop over all the temps."""
+    Dim = np.size(temps)
+    energy = np.zeros(Dim)
+    heatcapacity = np.zeros(Dim)
+    temperature = np.zeros(Dim)
+    magnetization = np.zeros(Dim)
+    
+    for i in range(temps):
+        (E_av, E_variance, M_av, _, _) = monteCarlo(temp[i], size, trials)
+        temperature[i] = temps[i]
+        energy[i] = E_av
+        heatcapacity[i] = E_variance
+        magnetization[i] = M_av
+
+    return (energy, heatcapacity, temperature, magnetization)
+
+
 def main():
     """Main program"""
 
@@ -112,18 +131,7 @@ def main():
 
 
     temps = np.arange(temp_init, temp_end+temp_step/2, temp_step, float)
-    Dim = np.size(temps)
-    energy = np.zeros(Dim)
-    heatcapacity = np.zeros(Dim)
-    temperature = np.zeros(Dim)
-    magnetization = np.zeros(Dim)
-    
-    for i, temp in enumerate(temps):
-        (E_av, E_variance, M_av, _, _) = monteCarlo(temp, size, trials)
-        temperature[i] = temp
-        energy[i] = E_av
-        heatcapacity[i] = E_variance
-        magnetization[i] = M_av
+    (energy, heatcapacity, temperature, magnetization) = temp_loop(temps, size, trials)
     
     plt.figure(1)
     
