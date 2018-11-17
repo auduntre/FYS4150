@@ -63,7 +63,7 @@ def monteCarlo(temp, size, trials, game=False, method=1):
     for i in range(trials):
         #Metropolis
         #Loop over all spins, pick a random spin each time
-        for s in range(size**2):
+        for s in range(size * size):
             x = int(np.random.random() * size)
             y = int(np.random.random() * size)
             deltaE = 2 * spin_matrix[x,y] * \
