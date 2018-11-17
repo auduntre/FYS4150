@@ -2,7 +2,7 @@
 # taken from lecture notes in FYS3150 
 
 from matplotlib import pyplot as plt
-from numba import jit
+from numba import jit, prange
 
 import numpy as np
 import sys, math
@@ -21,7 +21,7 @@ def periodic(i, limit, add):
     return (i + limit + add) % limit
 
 
-@jit(nopython=True, nogil=True)
+@jit(nopython=True)
 def monteCarlo(temp, size, trials, game=False, method=1):
     """
     Calculate the enerInvalid usage of BoundFunction(array.item for array(int64, 2d, C)) with parameters (int64, int64)
@@ -100,17 +100,17 @@ def monteCarlo(temp, size, trials, game=False, method=1):
     return (E_av, E_variance, M_av, M_variance, Mabs_av)
 
 
-@jit(nopython=True):
+@jit(nopython=True, parallel=True)
 def temp_loop (temps, size, trials):
     """Loop over all the temps."""
-    Dim = np.size(temps)
+    Dim = len(temps)
     energy = np.zeros(Dim)
     heatcapacity = np.zeros(Dim)
     temperature = np.zeros(Dim)
     magnetization = np.zeros(Dim)
     
-    for i in range(temps):
-        (E_av, E_variance, M_av, _, _) = monteCarlo(temp[i], size, trials)
+    for i in prange(Dim):
+        (E_av, E_variance, M_av, _, _) = monteCarlo(temps[i], size, trials)
         temperature[i] = temps[i]
         energy[i] = E_av
         heatcapacity[i] = E_variance
@@ -153,7 +153,8 @@ def main():
     plt.xlabel(r'Temperature $J/(k_B)$')
     plt.ylabel(r'Magnetization per spin  $M/N$')
     plt.savefig('energycv.pdf')
-    plt.show()
+    #plt.show()
+
 
 if __name__ == "__main__":
     main()
