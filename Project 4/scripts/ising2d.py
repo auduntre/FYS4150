@@ -130,7 +130,7 @@ def main():
     trials      = 100000
     temp_init   = 1.8
     temp_end    = 2.6
-    temp_step   = 0.1
+    temp_step   = 0.01
 
 
     temps = np.arange(temp_init, temp_end+temp_step/2, temp_step, float)
