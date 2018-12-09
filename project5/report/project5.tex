@@ -1,0 +1,256 @@
+\documentclass[a4paper, fontsize=11pt]{article}
+
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[english]{babel} % English language/hyphenation
+%\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{diagbox}
+\usepackage{multirow}
+\usepackage{subcaption}
+
+\usepackage{pgfplotstable, booktabs, mathpazo}
+
+\pgfplotstableset{
+    every head row/.style={before row=\toprule,after row=\midrule},
+    every last row/.style={after row=\bottomrule},
+%    alias/{$T$}/.initial=0,
+%    alias/{$E$}/.initial=1,
+%    alias/{$C_V$}/.initial=2,
+%    alias/{$M$}/.initial=3,
+%    alias/{$chi$}/.initial=4,
+%    alias/{$abs(M)$}/.initial=5,
+}
+
+
+
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,
+citecolor=blue]{hyperref}
+
+%\bibliographystyle{ieeetr}
+\bibliographystyle{apalike}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
+\begin{document}
+
+\title{Project 5 FYS4150 \\ Partial Differential equations}
+\author{Audun Tahina Reitan \& Marius Holm}
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\maketitle
+
+
+\section{Abstract}
+
+
+\section{Introduction}
+
+In this project we want to study the numerical stability and errors of the forward Euler, backward Euler, and Crank-Nicolson discretization schemes. In order to do so we study the diffusion equation 
+
+
+\section{Methods}
+
+
+\subsection{Discretization}
+
+We wish to discretize the partial differential equation in order to create a system of linear equations which we can then solve using computationally. 
+
+\paragraph{}
+We start off by discretizing the time interval such that after $j$ time-steps the time is given by 
+
+\begin{equation}
+t_{j} = j \, \Delta t \quad j \geq 0
+\end{equation}
+
+We do the same for the spacial interval and split it into step lengths of the same size given by 
+
+\begin{equation}
+\Delta x = \dfrac{1}{n+1}
+\end{equation}
+
+such that the position after $i$ steps is given by 
+
+\begin{equation}
+x_{i} = i \, \Delta x \quad 0 \leq i \leq n+1
+\end{equation}
+
+More details regarding discretization of domains can be found in chapter 10 of the lecture notes. \cite{statphys} Below we apply three well-known discretization schemes to the diffusion equation
+
+\begin{align}
+\dfrac{\partial u(x,t)}{\partial t}  &= \dfrac{\partial^2 u(x,t)}{\partial x^2}, \quad t > 0, \: x \in [0, L]
+\\
+u_{t} &= u_{xx}
+\end{align}
+
+\subsubsection{Forward Euler}
+
+We discretize the time dependent part of our differential equation according to the forward Euler scheme centered at time $t$.
+
+\begin{equation}
+u_{t} \approx \dfrac{u(x, t+ \Delta t) - u(x, t)}{\Delta t} = \dfrac{u(x_{i}, t_{j}+ \Delta t) - u(x_{i}, t_{j})}{\Delta t}
+\end{equation}
+
+
+\begin{align}
+u_{xx} \approx& \dfrac{u(x + \Delta x, t) - 2u(x, t) + u(x - \Delta x, t)}{\Delta x^2}
+\\
+=&\dfrac{u(x_{i} + \Delta x, t_{j}) - 2u(x_{i}, t_{j}) + u(x_{i} - \Delta x, t_{j})}{\Delta x^2}
+\end{align}
+
+\subsubsection{Backward Euler}
+
+\begin{equation}
+u_{t} \approx \dfrac{u(x, t) - u(x, t - \Delta t)}{\Delta t} = \dfrac{u(x_{i}, t_{j}) - u(x_{i}, t_{j} -  \Delta t)}{\Delta t}
+\end{equation}
+
+
+\begin{align}
+u_{xx} \approx& \dfrac{u(x + \Delta x, t) - 2u(x, t) + u(x - \Delta x, t)}{\Delta x^2}
+\\
+=&\dfrac{u(x_{i} + \Delta x, t_{j}) - 2u(x_{i}, t_{j}) + u(x_{i} - \Delta x, t_{j})}{\Delta x^2}
+\end{align}
+
+\subsubsection{Crank-Nicolson}
+
+The implicit Crank-Nicolson scheme with a time-centered scheme at \\ $(x, t+\Delta t /2)$ as opposed to $(x, t)$ for the Euler schemes.
+
+\begin{equation}
+u_{t} \approx \dfrac{u(x, t+ \Delta t) - u(x, t)}{\Delta t} = \dfrac{u(x_{i}, t_{j}+ \Delta t) - u(x_{i}, t_{j})}{\Delta t},
+\end{equation}
+
+while the corresponding spatial second-order derivative is approximated as
+
+\begin{align}
+u_{xx} \approx &\dfrac{1}{2} \Bigg(\dfrac{u(x_{i} + \Delta x, t_{j}) - 2u(x_{i}, t_{j}) + u(x_{i} - \Delta x, t_{j})}{\Delta x^2} +
+\\
+&\dfrac{u(x_{i} + \Delta x, t_{j} + \Delta t) - 2u(x_{i}, t_{j}+ \Delta t) + u(x_{i} - \Delta x, t_{j}+ \Delta t)}{\Delta x^2}\Bigg)
+\end{align}
+
+\subsection{ }
+\cite{statphys} \cite{IPDE}
+
+
+\subsection{Implementation}
+
+
+
+\paragraph{}
+All our code, calculations, and plots used can be found in \href{https://github.com/MariusHolm/FYS4150}{my GitHub repository}. 
+
+\section{Results}
+
+
+\subsection{Analytic expressions}
+
+\paragraph{}
+
+
+\subsection{Numerical comparison}
+
+
+
+%
+%\begin{table}[h!tb]
+%\centering
+%\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_nopara/nopara_2_1000_1.000000.dat}
+%\caption{Numerical results for a system with $L=2$ with 1000 Monte Carlo cycles.}
+%\label{l2_1000}
+%\end{table}
+%
+%\begin{table}[h!tb]
+%\centering
+%\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_nopara/nopara_2_10000_1.000000.dat}
+%\caption{Numerical results for a system with $L=2$ with 10 000 Monte Carlo cycles.}
+%\end{table}
+%
+%\begin{table}[h!tb]
+%\centering
+%\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_nopara/nopara_2_100000_1.000000.dat}
+%\caption{Numerical results for a system with $L=2$ with 100 000 Monte Carlo cycles.}
+%\end{table}
+%
+%\begin{table}[h!tb]
+%\centering
+%\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_nopara/nopara_2_1000000_1.000000.dat}
+%\caption{Numerical results for a system with $L=2$ with 1 000 000 Monte Carlo cycles.}
+%\end{table}
+%
+%\begin{table}[h!tb]
+%\centering
+%\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_nopara/nopara_2_10000000_1.000000.dat}
+%\caption{Numerical results for a system with $L=2$ with 10 000 000 Monte Carlo cycles.}
+%\label{l2_10000000}
+%\end{table}
+
+
+
+\subsection{Most likely state}
+
+
+
+
+%\begin{figure}[H]
+%\begin{subfigure}[t]{0.5\linewidth}
+%\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/MCcycles/plots/t1plots/{Energy}.png}
+%\end{subfigure}
+%\begin{subfigure}[t]{0.5\linewidth}
+%\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/MCcycles/plots/t1plots/{AbsMagnetization}.png}
+%\end{subfigure}
+%\caption{Plots of the expecatation value for the energy and the absolute magnetization as functions of the number of Monte Carlo cycles. Using $T=1$. }
+%\label{MCcycles1}
+%\end{figure}
+
+
+%\begin{figure}[H]
+%	\begin{subfigure}[t]{0.5\linewidth}
+%	\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/MCcycles/plots/t24plots/{Energy}.png}
+%	\end{subfigure}
+%	\begin{subfigure}[t]{0.5\linewidth}
+%	\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/MCcycles/plots/t24plots/{AbsMagnetization}.png}
+%	\end{subfigure}
+%		\caption{Plots of the expecatation value for the energy and the absolute magnetization as functions of the number of Monte Carlo cycles. Here using $T=2.4$.}
+%		\label{MCcycles2}
+%\end{figure}
+
+
+
+\subsection{Numerical studies of phase transitions}
+
+
+
+\section{Conclusions}
+
+
+
+
+
+
+\bibliography{references}
+\end{document}
